@@ -2,7 +2,7 @@
 FROM node:18.16.0
 
 # define o diretório 'backend' como diretório principal
-WORKDIR /backend
+WORKDIR /home-app-backend/
 
 # copia o arquivo package.json para dentro do diretório atual para o diretório principal do container
 COPY package*.json .

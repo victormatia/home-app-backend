@@ -1,23 +1,29 @@
 {
-  "name": "backend",
+  "name": "home-app-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "An API Rest for a rental app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha -r ts-node/register src/tests/**/*.test.ts --exit -t 20000",
     "dev": "tsnd --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "npm run build && node /build/server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Victor Matias",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.17",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^20.4.9",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "@typescript-eslint/parser": "^6.4.0",
+    "chai": "^4.3.7",
+    "chai-http": "^4.4.0",
     "eslint": "^8.47.0",
+    "mocha": "^10.2.0",
+    "sinon": "^15.2.0",
+    "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.1.6"
   },

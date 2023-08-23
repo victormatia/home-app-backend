@@ -11,11 +11,11 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
-  cpf      String @unique
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  cpf       String   @unique
   birthDate DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -27,16 +27,16 @@ model User {
 }
 
 model Address {
-  id         String  @id @default(uuid())
+  id         String   @id @default(uuid())
   street     String
   city       String
   state      String
   postalCode String
   number     String
   apto       String?
-  complement String? @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  complement String?  @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   immobile Immobile? // relacionamento não obrigatório 1:1 com Immobile
 
@@ -44,18 +44,19 @@ model Address {
 }
 
 model Immobile {
-  id           String  @id @default(uuid())
+  id           String   @id @default(uuid())
   ownerId      String
   tenantId     String?
-  addressId    String  @unique
+  addressId    String   @unique
   type         String
-  bedroomsQty  Int     @default(1)
-  bathroomsQty Int     @default(1)
-  parkingQty   Int     @default(0)
-  sqrFootage   Decimal @db.Decimal(4, 2)
-  petFriendly  Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  price        Decimal  @db.Decimal(4, 2)
+  bedroomsQty  Int      @default(1)
+  bathroomsQty Int      @default(1)
+  parkingQty   Int      @default(0)
+  sqrFootage   Decimal  @db.Decimal(4, 2)
+  petFriendly  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   owner   User    @relation("owner", fields: [ownerId], references: [id])
   tenant  User?   @relation("tenant", fields: [tenantId], references: [id])

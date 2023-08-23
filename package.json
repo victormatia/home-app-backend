@@ -7,7 +7,8 @@
     "test": "mocha -r ts-node/register src/tests/**/*.test.ts --exit -t 20000",
     "dev": "tsnd --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "npm run build && node /build/server.js"
+    "start": "npm run build && node /build/server.js",
+    "migrate": "npx prisma migrate dev"
   },
   "keywords": [],
   "author": "Victor Matias",

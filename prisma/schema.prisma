@@ -49,7 +49,7 @@ model Immobile {
   tenantId     String?
   addressId    String   @unique
   type         String
-  price        Decimal  @db.Decimal(4, 2)
+  price        Decimal  @db.Decimal(6, 2)
   bedroomsQty  Int      @default(1)
   bathroomsQty Int      @default(1)
   parkingQty   Int      @default(0)

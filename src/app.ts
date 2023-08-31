@@ -1,5 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 
+import userRoutes from './routes/user.routes';
+
 class App {
   // melhoria: aplicar desacoplamento de depedência
   private _server = express();
@@ -7,9 +9,13 @@ class App {
   constructor() {
     this.config();
 
+    // routes
     this._server.get('/', async (_req: Request, res: Response) => {
       res.status(200).send('Ok');
     });
+
+    this._server.use('/user', userRoutes);
+
   }
 
   private config():void {

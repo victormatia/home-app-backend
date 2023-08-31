@@ -1,11 +1,6 @@
-import express, { Request, Response } from 'express';
+import App from './app';
 
+const app = new App();
 
-const server = express();
+app.init(3001);
 
-server.get('/', async (_req: Request, res: Response) => {
-  res.status(200).send('Ok');
-});
-
-
-server.listen(3001, () => console.log('server is running on: http://localhost:3001'));

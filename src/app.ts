@@ -9,18 +9,17 @@ class App {
   constructor() {
     this.config();
 
-    // routes
+    // test route
     this._server.get('/', async (_req: Request, res: Response) => {
       res.status(200).send('Ok');
     });
 
     this._server.use('/user', userRoutes);
-
   }
 
   private config():void {
     const accessControl = (_req: Request, res: Response, next: NextFunction) => {
-      res.header('Access-Control-Allow-Origin', 'localhost:3000');
+      res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS,PUT,PATCH');
       res.header('Access-Control-Allow-Headers', '*');
       next();

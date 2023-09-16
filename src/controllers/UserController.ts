@@ -12,7 +12,7 @@ class UserController {
     const  { message, result } = await this._service.create(req.body);
 
     return message ? res.status(400).json({ message }) 
-      : res.status(201).json({ result });
+      : res.status(201).json({ token: result });
   }; 
 }
 

@@ -1,5 +1,6 @@
 import { User, PrismaClient } from '@prisma/client';
 import IService from '../interfaces/IService';
+import Jwt from '../auth/Jwt';
 
 class UserService {
   private _model: PrismaClient;
@@ -8,15 +9,29 @@ class UserService {
     this._model = model;
   }
 
-  public async create(infos: User): Promise<IService<User>> {
+  public async create(infos: User): Promise<IService<string>> {
     try {
-      const result = await this._model.user.create({data: infos});
+      await this._model.user.create({data: infos});
 
-      return {result};
+      const token = Jwt.createToken({...infos});
+
+      return { result: token };
 
     } catch (e) {
       console.error(e);
       return { message: 'Something went wrong, user was not registered' };
+    }
+  }
+
+  public async getAllUsers() {
+    try {
+      const users = await this._model.user.findMany();
+
+      return { result: users };
+
+    } catch (e) {
+      console.error(e);
+      return { message: 'Something went wrong' };
     }
   }
 }

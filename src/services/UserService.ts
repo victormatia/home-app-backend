@@ -22,6 +22,18 @@ class UserService {
       return { message: 'Something went wrong, user was not registered' };
     }
   }
+
+  public async getAllUsers() {
+    try {
+      const users = await this._model.user.findMany();
+
+      return { result: users };
+
+    } catch (e) {
+      console.error(e);
+      return { message: 'Something went wrong' };
+    }
+  }
 }
 
 export default UserService;

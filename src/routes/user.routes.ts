@@ -10,5 +10,6 @@ const controller = new UserController(service);
 
 route.get('/list', controller.getAllUsers);
 route.post('/sign-up', controller.create);
+route.post('/sign-in', controller.login);
 
 export default route;

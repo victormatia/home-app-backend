@@ -34,6 +34,24 @@ class UserService {
       return { message: 'Something went wrong' };
     }
   }
+
+  public async login(userId: string) {
+    try {
+      const user = await this._model.user.findUnique({ where: { id: userId } });
+
+      if(!user) {
+        return { message: 'User not found' };
+      }
+
+      const token = Jwt.createToken(user);
+
+      return { result: token };
+
+    } catch (e) {
+      console.error(e);
+      return { message: 'Something went wrong, user not found' };
+    }
+  }
 }
 
 export default UserService;

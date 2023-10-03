@@ -9,6 +9,7 @@ const prisma = new PrismaClient();
 const service = new ImmobileService(prisma);
 const controller = new ImmobileController(service);
 
+router.get('/list', controller.getAll);
 router.post('/create', controller.create);
 
 export default router;

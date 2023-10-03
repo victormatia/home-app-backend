@@ -19,6 +19,18 @@ class ImmobileService {
       return { message: 'Something went wrong, new immobile was not registered' };
     }
   }
+
+  public async getAll(): Promise<IService<Immobile[]>> {
+    try {
+      const allImmobiles = await this._model.immobile.findMany();
+
+      return { result: allImmobiles };
+
+    } catch (e) {
+      console.error(e);
+      return { message: 'Something went wrong' };
+    }
+  }
 }
 
 export default ImmobileService;

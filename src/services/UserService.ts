@@ -23,7 +23,7 @@ class UserService {
     }
   }
 
-  public async getAllUsers() {
+  public async getAll(): Promise<IService<User[]>> { // renomear esse método para getAll?
     try {
       const users = await this._model.user.findMany();
 
@@ -35,7 +35,7 @@ class UserService {
     }
   }
 
-  public async login(userId: string) {
+  public async login(userId: string): Promise<IService<string>> {
     try {
       const user = await this._model.user.findUnique({ where: { id: userId } });
 

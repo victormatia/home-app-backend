@@ -8,7 +8,8 @@
     "dev": "npm run migrate && tsnd --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "npm run build && node /build/server.js",
-    "migrate": "npx prisma migrate dev"
+    "migrate": "npx prisma migrate dev",
+    "seed": "ts-node prisma/seeders/"
   },
   "keywords": [],
   "author": "Victor Matias",

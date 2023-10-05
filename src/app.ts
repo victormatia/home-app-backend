@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 
 import userRoutes from './routes/user.routes';
+import immobileRoutes from './routes/immobile.routes';
 
 class App {
   // melhoria: aplicar desacoplamento de depedência
@@ -15,6 +16,7 @@ class App {
     });
 
     this._server.use('/user', userRoutes);
+    this._server.use('/immobile', immobileRoutes);
   }
 
   private config():void {

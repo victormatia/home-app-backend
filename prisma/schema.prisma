@@ -60,7 +60,7 @@ model Immobile {
   bedroomsQty  Int      @default(1)
   bathroomsQty Int      @default(1)
   parkingQty   Int      @default(0)
-  sqrFootage   Decimal  @db.Decimal(4, 2)
+  sqrFootage   Decimal  @db.Decimal(7, 2) // ex: 10000,20
   petFriendly  Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

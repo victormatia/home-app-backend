@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha -r ts-node/register src/tests/**/*.test.ts --exit -t 20000",
-    "dev": "npm run migrate && tsnd --respawn --transpile-only src/server.ts",
+    "dev": "tsnd --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "npm run build && node /build/server.js",
     "migrate": "npx prisma migrate dev",
-    "seed": "ts-node prisma/seeders/"
+    "seed": "ts-node prisma/seeders/",
+    "db:reset": "npx prisma db push --force-reset  && npm run seed"
   },
   "keywords": [],
   "author": "Victor Matias",

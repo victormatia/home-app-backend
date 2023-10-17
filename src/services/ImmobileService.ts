@@ -22,7 +22,12 @@ class ImmobileService {
 
   public async getAll(): Promise<IService<Immobile[]>> {
     try {
-      const allImmobiles = await this._model.immobile.findMany();
+      const allImmobiles = await this._model.immobile.findMany({
+        include: {
+          address: true,
+          type: true,
+        },
+      });
 
       return { result: allImmobiles };
 

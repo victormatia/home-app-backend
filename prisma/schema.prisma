@@ -29,6 +29,7 @@ model User {
 model Address {
   id         String   @id @default(uuid())
   street     String
+  burgh      String
   city       String
   state      String
   postalCode String
@@ -40,14 +41,16 @@ model Address {
 
   immobile Immobile? // relacionamento não obrigatório 1:1 com Immobile
 
-  @@map("address")
+  @@map("addresses")
 }
 
 model ImmobileType {
-  id       String     @id @default(uuid())
-  type     String
+  id   String @id @default(uuid())
+  type String
 
   Immobile Immobile[] // relacionamento de 1:N com Immobile
+
+  @@map("immobile_types")
 }
 
 model Immobile {
@@ -62,13 +65,34 @@ model Immobile {
   parkingQty   Int      @default(0)
   sqrFootage   Decimal  @db.Decimal(7, 2) // ex: 10000,20
   petFriendly  Boolean  @default(false)
+  description  String   @db.VarChar(250) // validar se é tamanho suficiente para uma descrição
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  owner          User         @relation("owner", fields: [ownerId], references: [id])
-  tenant         User?        @relation("tenant", fields: [tenantId], references: [id])
-  address        Address      @relation(fields: [addressId], references: [id])
-  type           ImmobileType @relation(fields: [typeId], references: [id])
+  owner   User            @relation("owner", fields: [ownerId], references: [id])
+  tenant  User?           @relation("tenant", fields: [tenantId], references: [id])
+  address Address         @relation(fields: [addressId], references: [id])
+  type    ImmobileType    @relation(fields: [typeId], references: [id])
+  photos  ImmobilePhoto[]
 
-  @@map("immobile")
+  @@map("immobiles")
+}
+
+model Photo {
+  id             String          @id @default(uuid())
+  url            String
+  immobilePhotos ImmobilePhoto[]
+
+  @@map("photos")
+}
+
+model ImmobilePhoto {
+  immobileId String
+  photoId    String
+
+  immobile Immobile @relation(fields: [immobileId], references: [id])
+  photo    Photo    @relation(fields: [photoId], references: [id])
+
+  @@id([immobileId, photoId])
+  @@map("immobile_photos")
 }

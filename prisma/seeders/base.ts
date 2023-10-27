@@ -22,6 +22,7 @@ async function main() {
         number: '0000',
         apto: '0000',
         complement: 'Próximo ao bar do Mozá',
+        burgh: 'Violete',
       },
       {
         id: '001',
@@ -32,6 +33,7 @@ async function main() {
         number: '0001',
         apto: '0001',
         complement: 'Próximo ao bar do Mozá',
+        burgh: 'Violete',
       },
       {
         id: '003',
@@ -40,6 +42,7 @@ async function main() {
         state: 'Ceará',
         postalCode: '62500-000',
         number: '0003',
+        burgh: 'Cruzeiro',
       },
       {
         id: '004',
@@ -48,6 +51,7 @@ async function main() {
         state: 'Ceará',
         postalCode: '06803-440',
         number: '0004',
+        burgh: 'Aldeota',
       },
       {
         id: '005',
@@ -56,6 +60,7 @@ async function main() {
         state: 'Ceará',
         postalCode: '06803-440',
         number: '0005',
+        burgh: 'Centro',
       },
       {
         id: '006',
@@ -64,6 +69,7 @@ async function main() {
         state: 'Ceará',
         postalCode: '06803-440',
         number: '0006',
+        burgh: 'Fátima',
       },
     ],
   });
@@ -96,6 +102,7 @@ async function main() {
   const immobiles = await prisma.immobile.createMany({
     data: [
       {
+        id: '000',
         ownerId: 'google-oauth2|10015361573371827215',
         addressId: '000',
         price: '500',
@@ -104,8 +111,10 @@ async function main() {
         bedroomsQty: 2,
         bathroomsQty: 2,
         petFriendly: true,
+        description: '',
       },
       {
+        id: '001',
         ownerId: 'google-oauth2|10015361573371827215',
         addressId: '001',
         price: '500',
@@ -114,8 +123,10 @@ async function main() {
         bedroomsQty: 2,
         bathroomsQty: 2,
         petFriendly: true,
+        description: '',
       },
       {
+        id: '002',
         ownerId: 'google-oauth2|10015361573371827215',
         addressId: '004',
         price: '500',
@@ -124,8 +135,10 @@ async function main() {
         bedroomsQty: 2,
         bathroomsQty: 2,
         petFriendly: true,
+        description: '',
       },
       {
+        id: '003',
         ownerId: 'google-oauth2|10015361573371827215',
         addressId: '005',
         price: '1000',
@@ -134,8 +147,10 @@ async function main() {
         bedroomsQty: 4,
         bathroomsQty: 3,
         petFriendly: true,
+        description: '',
       },
       {
+        id: '004',
         ownerId: 'google-oauth2|10015361573371827215',
         addressId: '006',
         price: '850',
@@ -144,6 +159,65 @@ async function main() {
         bedroomsQty: 3,
         bathroomsQty: 2,
         petFriendly: true,
+        description: '',
+      },
+    ],
+  });
+
+  const photos = await prisma.photo.createMany({
+    data: [
+      {
+        id: '000',
+        url: 'https://images.unsplash.com/photo-1614568742191-1ec6d6c183b3?auto=format&fit=crop&q=60&w=500&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8NTN8fHxlbnwwfHx8fHw%3D',
+      },
+      {
+        id: '001',
+        url: 'https://images.unsplash.com/photo-1614568054271-2381b5b1beab?auto=format&fit=crop&q=60&w=500&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8NTV8fHxlbnwwfHx8fHw%3D',
+      },
+    ],
+  });
+
+  const immobilePhotos = await prisma.immobilePhoto.createMany({
+    data: [
+      {
+        immobileId: '000',
+        photoId: '000',
+      },
+      {
+        immobileId: '000',
+        photoId: '001',
+      },
+      {
+        immobileId: '001',
+        photoId: '000',
+      },
+      {
+        immobileId: '001',
+        photoId: '001',
+      },
+      {
+        immobileId: '002',
+        photoId: '000',
+      },
+      {
+        immobileId: '002',
+        photoId: '001',
+      },
+      {
+        immobileId: '003',
+        photoId: '000',
+      },
+      {
+        immobileId: '003',
+        photoId: '001',
+      },
+      {
+        immobileId: '004',
+        photoId: '000',
+      },
+      {
+        immobileId: '004',
+        photoId: '001',
       },
     ],
   });
@@ -153,6 +227,8 @@ async function main() {
     addresses,
     immobileTypes,
     immobiles,
+    photos,
+    immobilePhotos,
   });
 }
 main()

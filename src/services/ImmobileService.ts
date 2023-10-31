@@ -26,7 +26,7 @@ class ImmobileService {
         include: {
           address: true,
           type: true,
-          photos: { include: { photo: { select: { url: true } } } },
+          photos: {select: {photo: { select: { url: true } }}},
         },
       });
 

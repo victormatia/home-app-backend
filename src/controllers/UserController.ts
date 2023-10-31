@@ -12,8 +12,23 @@ class UserController {
     const  { message, result } = await this._service.create(req.body);
 
     return message ? res.status(400).json({ message }) 
-      : res.status(201).json({ result });
+      : res.status(201).json({ token: result });
   }; 
+
+  public getAll: RequestHandler = async (_req, res) => {
+    const { message, result } = await this._service.getAll();
+
+    return message ? res.status(400).json({ message }) 
+      : res.status(200).json(result);
+  };
+
+  public login: RequestHandler = async (req, res) => {
+    const { id } = req.body;
+    const { message, result } = await this._service.login(id);
+
+    return message ? res.status(404).json({ message }) 
+      : res.status(200).json({ token: result });
+  };
 }
 
 export default UserController;

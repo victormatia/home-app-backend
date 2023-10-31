@@ -8,7 +8,8 @@ const prisma = new PrismaClient();
 const service = new UserService(prisma);
 const controller = new UserController(service);
 
+route.get('/list', controller.getAll);
 route.post('/sign-up', controller.create);
-
+route.post('/sign-in', controller.login);
 
 export default route;

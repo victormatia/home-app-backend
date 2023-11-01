@@ -1,4 +1,4 @@
-import { Immobile, PrismaClient } from '@prisma/client';
+import { Immobile, Prisma, PrismaClient } from '@prisma/client';
 import IService from '../interfaces/IService';
 
 class ImmobileService {
@@ -8,9 +8,18 @@ class ImmobileService {
     this._model = model;
   }
 
-  public async create(infos: Immobile): Promise<IService<Immobile>> {
+  public async create(immobileInfo: Immobile): Promise<IService<Immobile>> {
     try {
-      const registeredImmobile = await this._model.immobile.create({data: infos});
+      const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
+
+      const data: Prisma.ImmobileCreateInput = {
+        ...otherInfos,
+        address: { connect: { id: addressId } },
+        owner: { connect: { id: ownerId } },
+        type: { connect: { id: typeId } },
+      };
+
+      const registeredImmobile = await this._model.immobile.create({ data });
 
       return { result: registeredImmobile };
 

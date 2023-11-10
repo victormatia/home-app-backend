@@ -23,21 +23,21 @@ class UserService {
     }
   }
 
-  public async getAll(): Promise<IService<User[]>> { // renomear esse método para getAll?
+  // public async getAll(): Promise<IService<User[]>> { // Esse método é necessário?
+  //   try {
+  //     const users = await this._model.user.findMany();
+
+  //     return { result: users };
+
+  //   } catch (e) {
+  //     console.error(e);
+  //     return { message: 'Something went wrong' };
+  //   }
+  // }
+
+  public async login(userEmail: string): Promise<IService<string>> {
     try {
-      const users = await this._model.user.findMany();
-
-      return { result: users };
-
-    } catch (e) {
-      console.error(e);
-      return { message: 'Something went wrong' };
-    }
-  }
-
-  public async login(userId: string): Promise<IService<string>> {
-    try {
-      const user = await this._model.user.findUnique({ where: { id: userId } });
+      const user = await this._model.user.findUnique({ where: { email: userEmail } });
 
       if(!user) {
         return { message: 'User not found' };

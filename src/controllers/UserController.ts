@@ -15,16 +15,16 @@ class UserController {
       : res.status(201).json({ token: result });
   }; 
 
-  public getAll: RequestHandler = async (_req, res) => {
-    const { message, result } = await this._service.getAll();
+  // public getAll: RequestHandler = async (_req, res) => {
+  //   const { message, result } = await this._service.getAll();
 
-    return message ? res.status(400).json({ message }) 
-      : res.status(200).json(result);
-  };
+  //   return message ? res.status(400).json({ message }) 
+  //     : res.status(200).json(result);
+  // };
 
   public login: RequestHandler = async (req, res) => {
-    const { id } = req.body;
-    const { message, result } = await this._service.login(id);
+    const { email } = req.body;
+    const { message, result } = await this._service.login(email);
 
     return message ? res.status(404).json({ message }) 
       : res.status(200).json({ token: result });

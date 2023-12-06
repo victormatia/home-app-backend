@@ -1,8 +1,8 @@
-export interface UserCreateDTO {
+export interface CreateUserDTO {
   id: string;
-  name?: string;
+  name: string | null;
   email: string;
-  password?: string;
+  password: string | null;
   cpf: string;
-  birthDate?: Date;
+  birthDate: Date | null;
 }

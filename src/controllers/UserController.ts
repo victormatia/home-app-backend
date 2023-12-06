@@ -1,4 +1,5 @@
-import { RequestHandler } from 'express';
+import { Request, Response } from 'express';
+import { UserCreateDTO } from '../interfaces/UserDto';
 import UserService from '../services/UserService';
 
 class UserController {
@@ -8,21 +9,22 @@ class UserController {
     this._service = service;
   }
 
-  public create: RequestHandler = async (req, res) => {
-    const  { message, result } = await this._service.create(req.body);
+  public create = async (req: Request, res: Response) => {
+    const data: UserCreateDTO = req.body;
+    const  { message, result } = await this._service.create(data);
 
     return message ? res.status(400).json({ message }) 
       : res.status(201).json({ token: result });
   }; 
 
-  public getAll: RequestHandler = async (_req, res) => {
+  public getAll = async (_req:Request, res: Response) => {
     const { message, result } = await this._service.getAll();
 
     return message ? res.status(400).json({ message }) 
       : res.status(200).json(result);
   };
 
-  public login: RequestHandler = async (req, res) => {
+  public login = async (req: Request, res: Response) => {
     const { id } = req.body;
     const { message, result } = await this._service.login(id);
 

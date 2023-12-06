@@ -1,19 +1,20 @@
-import { User, PrismaClient } from '@prisma/client';
-import IService from '../interfaces/IService';
+import { User } from '@prisma/client';
 import Jwt from '../auth/Jwt';
+import IService from '../interfaces/IService';
+import { UserCreateDTO } from '../interfaces/UserDto';
+import UserRepository from '../repository/UserRepository';
 
 class UserService {
-  private _model: PrismaClient;
+  
 
-  constructor(model: PrismaClient) {
-    this._model = model;
+  constructor(private _repository: UserRepository) {
   }
 
-  public async create(infos: User): Promise<IService<string>> {
+  public async create(data: UserCreateDTO): Promise<IService<string>> {
     try {
-      await this._model.user.create({data: infos});
+      await this._repository.create(data);
 
-      const token = Jwt.createToken({...infos});
+      const token = Jwt.createToken({...data});
 
       return { result: token };
 
@@ -23,9 +24,9 @@ class UserService {
     }
   }
 
-  public async getAll(): Promise<IService<User[]>> { // renomear esse método para getAll?
+  public async getAll(): Promise<IService<User[]>> { 
     try {
-      const users = await this._model.user.findMany();
+      const users = await this._repository.getAll();
 
       return { result: users };
 
@@ -37,7 +38,7 @@ class UserService {
 
   public async login(userId: string): Promise<IService<string>> {
     try {
-      const user = await this._model.user.findUnique({ where: { id: userId } });
+      const user = await this._repository.findUnique(userId);
 
       if(!user) {
         return { message: 'User not found' };

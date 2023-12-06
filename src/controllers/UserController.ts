@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { UserCreateDTO } from '../interfaces/UserDto';
+import { CreateUserDTO } from '../interfaces/UserDto';
 import UserService from '../services/UserService';
 
 class UserController {
@@ -10,7 +10,7 @@ class UserController {
   }
 
   public create = async (req: Request, res: Response) => {
-    const data: UserCreateDTO = req.body;
+    const data: CreateUserDTO = req.body;
     const  { message, result } = await this._service.create(data);
 
     return message ? res.status(400).json({ message }) 

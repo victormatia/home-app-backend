@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 import Jwt from '../auth/Jwt';
 import IService from '../interfaces/IService';
-import { UserCreateDTO } from '../interfaces/UserDto';
+import { CreateUserDTO } from '../interfaces/UserDto';
 import UserRepository from '../repository/UserRepository';
 
 class UserService {
@@ -10,7 +10,7 @@ class UserService {
   constructor(private _repository: UserRepository) {
   }
 
-  public async create(data: UserCreateDTO): Promise<IService<string>> {
+  public async create(data: CreateUserDTO): Promise<IService<string>> {
     try {
       await this._repository.create(data);
 
@@ -19,7 +19,7 @@ class UserService {
       return { result: token };
 
     } catch (e) {
-      console.error(e);
+      // console.error(e);
       return { message: 'Something went wrong, user was not registered' };
     }
   }

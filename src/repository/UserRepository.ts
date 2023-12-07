@@ -1,15 +1,16 @@
-import { PrismaClient, User } from '@prisma/client';
-import { UserCreateDTO } from '../interfaces/UserDto';
+import { Prisma, PrismaClient, User } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
+import { CreateUserDTO } from '../interfaces/UserDto';
 
 
 class UserRepository {
-  private _model: PrismaClient;
+  private _model:  PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>;
   
-  constructor(prismaClient: PrismaClient) {
-    this._model = prismaClient;
+  constructor(prismaCliente: PrismaClient) {
+    this._model = prismaCliente;
   }
 
-  async create(data: UserCreateDTO): Promise<User> {
+  async create(data: CreateUserDTO): Promise<User> {
     return await this._model.user.create({data});
   }
 

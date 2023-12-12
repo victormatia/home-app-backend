@@ -1,8 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import { expect } from 'chai';
 import sinon from 'sinon';
+import { CreateUserDTO } from '../../interfaces/UserDto';
 import UserRepository from '../../repository/UserRepository';
-import { createUserDataMock } from '../util/fakeData';
+import MockGenerator from '../util/MockGenerator';
 import prismaMock from '../util/prismaMock';
 
 describe('Testing User Repository Layer - Unit Test', () => {
@@ -20,10 +21,10 @@ describe('Testing User Repository Layer - Unit Test', () => {
     
     
     it('Should create a user successfully', async () => {
-      const {createUserDtoMock, userCreatedMock} = createUserDataMock();
+      const userCreatedMock = MockGenerator.generateFakeUser();
       prismaMock.user.create.resolves(userCreatedMock);
       
-      const userCreated = await userRepository.create(createUserDtoMock);
+      const userCreated = await userRepository.create({} as CreateUserDTO);
       
       expect(prismaMock.user.create.calledOnce).to.be.true;
     

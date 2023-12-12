@@ -4,6 +4,7 @@ import { CreateUserDTO } from '../../interfaces/UserDto';
 
 const chance = new Chance();
 class MockGenerator {
+  
   static generateFakeCreateUserDTO(): CreateUserDTO {
     return {
       id: chance.guid(),
@@ -31,6 +32,10 @@ class MockGenerator {
 
   static generateFakeId() {
     return chance.guid();
+  }
+
+  static generateFakeEmail() {
+    return chance.email();
   }
 }
 export default MockGenerator;

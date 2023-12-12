@@ -29,5 +29,8 @@ class MockGenerator {
     return Array.from({length}, () => this.generateFakeUser());
   }
 
+  static generateFakeId() {
+    return chance.guid();
+  }
 }
 export default MockGenerator;

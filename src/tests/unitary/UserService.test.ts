@@ -46,30 +46,6 @@ describe('Testing Service Layer - Unit Test', () => {
     });
   });
 
-  describe('Tesing service getAll methdod', () => {
-    it('Should return a token if login is completed', async () => {
-      const lengthOfList = 5;
-      const userListMock = MockGenerator.generateListOfFakeUsers(lengthOfList);
-
-      const getAllUsersStub = sinon.stub(UserRepository.prototype, 'getAll').resolves(userListMock);
-
-      const errorMessage = await userService.getAll();
-
-      expect(getAllUsersStub.calledOnce).to.be.true;
-      expect(errorMessage.result).to.be.deep.equal(userListMock);
-
-    });
-
-    it('Should return a erro message if is not possible to get a list of users', async () => {
-      const getAllUsersStub = sinon.stub(UserRepository.prototype, 'getAll').rejects();
-
-      const errorMessage = await userService.getAll();
-
-      expect(getAllUsersStub.calledOnce).to.be.true;
-      expect(errorMessage.message).to.be.equal('Something went wrong');
-    });
-  });
-
   describe('Testing service login method', () => {
 
     it('Should return a json web token if user is created', async () => {
@@ -77,7 +53,7 @@ describe('Testing Service Layer - Unit Test', () => {
       const fakeId = MockGenerator.generateFakeId();
       const fakeUser = MockGenerator.generateFakeUser();
 
-      const getUserByIdStub = sinon.stub(UserRepository.prototype, 'getUserById').resolves(fakeUser);
+      const getUserByIdStub = sinon.stub(UserRepository.prototype, 'findByEmail').resolves(fakeUser);
       const generateTokenStub = sinon.stub(Jwt, 'createToken').returns(tokenMock);
 
       const serviceResponse = await userService.login(fakeId);
@@ -90,7 +66,7 @@ describe('Testing Service Layer - Unit Test', () => {
     it('Should return an error message if user is not found', async () => {
       const fakeId = MockGenerator.generateFakeId();
 
-      const getUserByIdStub = sinon.stub(UserRepository.prototype, 'getUserById').resolves(null);
+      const getUserByIdStub = sinon.stub(UserRepository.prototype, 'findByEmail').resolves(null);
       const generateTokenStub = sinon.stub(Jwt, 'createToken');
       
       const errorMessage = await userService.login(fakeId);
@@ -103,7 +79,7 @@ describe('Testing Service Layer - Unit Test', () => {
     it('Should return an error message if an error is caught at the service', async () => {
       const fakeId = MockGenerator.generateFakeId();
 
-      const getUserByIdStub = sinon.stub(UserRepository.prototype, 'getUserById').rejects();
+      const getUserByIdStub = sinon.stub(UserRepository.prototype, 'findByEmail').rejects();
       const generateTokenStub = sinon.stub(Jwt, 'createToken');
       
       const errorMessage = await userService.login(fakeId);

@@ -1,4 +1,4 @@
-import { PrismaClient, User } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { expect } from 'chai';
 import { Request, Response } from 'express';
 import sinon from 'sinon';
@@ -56,41 +56,9 @@ describe('Testing Controller Layer - Unit Test', () => {
     });
   });
 
-  describe('Testing controller getAll method', () => {
-
-    it('Should return a response with status 200 and a list of users', async () => {
-      const lengthOfList = 5;
-      const serviceResponse: IService<User[]> = { result: MockGenerator.generateListOfFakeUsers(lengthOfList) };
-      const res = { status: sinon.stub(), json: sinon.stub() };
-      res.status.returnsThis();
-
-      const serviceGetAllStub = sinon.stub(UserService.prototype, 'getAll').resolves(serviceResponse);
-
-      await userController.getAll(req, res as unknown as Response);
-
-      expect(serviceGetAllStub.calledOnce).to.be.true;
-      expect(res.status.calledOnceWith(200)).to.be.true;
-      expect(res.json.calledWith(serviceResponse.result)).to.be.true;
-
-    });
-
-    it('Should return a response with status 400 and error message if can not get the list of users', async () => {
-      const serviceResponse: IService<User[]> = { message: 'Something went wrong' };
-      const res = { status: sinon.stub(), json: sinon.stub() };
-      res.status.returnsThis();
-
-      const serviceCreateStub = sinon.stub(UserService.prototype, 'getAll').resolves(serviceResponse);
-
-      await userController.getAll(req, res as unknown as Response);
-
-      expect(serviceCreateStub.calledOnce).to.be.true;
-      expect(res.status.calledOnceWith(400)).to.be.true;
-      expect(res.json.calledWith({ message: serviceResponse.message })).to.be.true;
-    });
-  });
   describe('Testing controller login method', () => {
     beforeEach(() => {
-      req = { body: { id: MockGenerator.generateFakeId() } } as Request;
+      req = { body: { email: MockGenerator.generateFakeEmail() } } as Request;
     });
     afterEach(() => {
       sinon.restore();

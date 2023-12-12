@@ -14,11 +14,8 @@ class UserRepository {
     return await this._model.user.create({ data });
   }
 
-  async getAll(): Promise<User[]> {
-    return this._model.user.findMany();
-  }
-  async getUserById(id: string): Promise<User | null> {
-    return this._model.user.findUnique({ where: { id } });
+  async findByEmail(email: string): Promise<User | null> {
+    return this._model.user.findUnique({ where: { email } });
   }
 }
 

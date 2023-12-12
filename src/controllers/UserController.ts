@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response } from 'express';
+import { Request, Response } from 'express';
 import { CreateUserDTO } from '../interfaces/UserDto';
 import UserService from '../services/UserService';
 
@@ -17,7 +17,7 @@ class UserController {
       : res.status(201).json({ token: result });
   }; 
 
-  public login: RequestHandler = async (req, res) => {
+  public login = async (req: Request, res: Response) => {
     const { email } = req.body;
     const { message, result } = await this._service.login(email);
 

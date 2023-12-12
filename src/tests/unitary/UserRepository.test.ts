@@ -33,46 +33,25 @@ describe('Testing User Repository Layer - Unit Test', () => {
     });
   });
 
-  describe('Tesing repository getAll methdod', () => {
-    it('Should return a list of users', async () => {
-      const lengthOfList = 5;
-      const userListMock = MockGenerator.generateListOfFakeUsers(lengthOfList);
-
-      prismaMock.user.findMany.resolves(userListMock);
-
-      const listOfUsers = await userRepository.getAll();
-
-      expect(prismaMock.user.findMany.calledOnce).to.be.true;
-      expect(listOfUsers).to.have.length(lengthOfList);
-      listOfUsers.forEach((user) => {
-        expect(user).to.be.have.property('id');
-        expect(user).to.be.have.property('name');
-        expect(user).to.be.have.property('email');
-        expect(user).to.be.have.property('password');
-        expect(user).to.be.have.property('birthDate');
-        expect(user).to.be.have.property('createdAt');
-        expect(user).to.be.have.property('updatedAt');
-      });
-    });
-  });
-  describe('Testing repository getUserByIdMethod', () => {
+  
+  describe('Testing repository findByEmail method', () => {
     it('Should return a user if does exist', async () => {
       const mockedUser = MockGenerator.generateFakeUser();
 
       prismaMock.user.findUnique.resolves(mockedUser);
 
-      const user = await userRepository.getUserById(mockedUser.id);
+      const user = await userRepository.findByEmail(mockedUser.email);
 
-      expect(prismaMock.user.findUnique.calledOnceWith({ where: { id: mockedUser.id } }));
-      expect(user?.id).to.be.equal(mockedUser.id);
+      expect(prismaMock.user.findUnique.calledOnceWith({ where: { email: mockedUser.email } }));
+      expect(user?.email).to.be.equal(mockedUser.email);
     });
     it('Should return null if user does not exist', async () => {
-      const fakeId = MockGenerator.generateFakeId();
+      const fakeEmail = MockGenerator.generateFakeEmail();
       prismaMock.user.findUnique.resolves(null);
 
-      const user = await userRepository.getUserById(fakeId);
+      const user = await userRepository.findByEmail(fakeEmail);
 
-      expect(prismaMock.user.findUnique.calledOnceWith({ where: { id: fakeId} }));
+      expect(prismaMock.user.findUnique.calledOnceWith({ where: { id: fakeEmail} }));
       expect(user).to.be.null;
     });
   });

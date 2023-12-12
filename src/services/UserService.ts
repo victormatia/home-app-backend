@@ -25,7 +25,7 @@ class UserService {
 
   public async login(userEmail: string): Promise<IService<string>> {
     try {
-      const user = await this._model.user.findUnique({ where: { email: userEmail } });
+      const user = await this._repository.findByEmail(userEmail);
 
       if (!user) {
         return { message: 'User not found' };

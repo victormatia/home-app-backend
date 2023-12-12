@@ -25,5 +25,9 @@ class MockGenerator {
     };
   }
 
+  static generateListOfFakeUsers(length: number): User[] {
+    return Array.from({length}, () => this.generateFakeUser());
+  }
+
 }
 export default MockGenerator;

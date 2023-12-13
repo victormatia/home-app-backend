@@ -7,7 +7,7 @@ WORKDIR /home-app-backend/
 # copia o arquivo package.json para dentro do diretório atual para o diretório principal do container
 COPY package*.json .
 
-# intala as dependências no container
+# instala as dependências no container
 RUN npm i
 
 # copia todos os arquivos locais para dentro do container

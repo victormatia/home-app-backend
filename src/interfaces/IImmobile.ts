@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client';
+
 export interface Address {
     id: string;
     street: string;
@@ -5,11 +7,11 @@ export interface Address {
     city: string;
     state: string;
     postalCode: string;
-    number: string;
-    apto: string;
+    number: number;
+    apto: number;
     complement: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
   }
   
 export interface Type {
@@ -23,18 +25,22 @@ export interface Immobile {
     tenantId: string | null;
     addressId: string;
     typeId: string;
-    price: string;
+    price: Prisma.Decimal;
     bedroomsQty: number;
     bathroomsQty: number;
     parkingQty: number;
-    sqrFootage: string;
+    sqrFootage: Prisma.Decimal;
     petFriendly: boolean;
     description: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
     address: Address;
     type: Type;
-    photos: string[];
+    photos: Photo[];
   }
-  
+export interface Photo {
+    id: string;
+    url: string;
+  }
+
 export type ImmobileList = Immobile[];

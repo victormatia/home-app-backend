@@ -29,6 +29,15 @@ class ImmobileController {
     return message ? res.status(400).json({ message }) 
       : res.status(200).json(result);
   }; 
+
+  public deleteImmobileById: RequestHandler = async (_req, res) => {
+    const { id } = _req.params;
+    const  { message, result } = await this._service.deleteImmobileById(id);
+
+    return message ? res.status(400).json({ message }) 
+      : res.status(200).json(result);
+  };
+  
 }
 
 export default  ImmobileController;

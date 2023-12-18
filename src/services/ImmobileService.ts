@@ -58,6 +58,19 @@ class ImmobileService {
       return { message: 'Something went wrong' };
     }
   }
+
+  public async deleteImmobileById(id: string): Promise<IService<Immobile>> {
+    try {
+      await this._model.immobilePhoto.deleteMany({where: { immobileId: id }});
+      const immobile = await this._model.immobile.delete({where: { id: id }});
+  
+      return { result: immobile || null };
+  
+    } catch (e) {
+      console.error(e);
+      return { message: 'Something went wrong' };
+    }
+  }
 }
 
 export default ImmobileService;

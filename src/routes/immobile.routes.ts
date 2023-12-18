@@ -12,5 +12,6 @@ const controller = new ImmobileController(service);
 
 router.get('/list', controller.getAll);
 router.post('/create', TokenMiddleware.validate, controller.create);
+router.post('/delete', TokenMiddleware.validate, controller.create);
 
 export default router;

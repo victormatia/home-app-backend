@@ -46,6 +46,18 @@ class ImmobileService {
       return { message: 'Something went wrong' };
     }
   }
+
+  public async getImmobileById(id: string): Promise<IService<Immobile>> {
+    try {
+      const immobile = await this._model.immobile.findUnique({where: { id: id }});
+  
+      return { result: immobile || null };
+  
+    } catch (e) {
+      console.error(e);
+      return { message: 'Something went wrong' };
+    }
+  }
 }
 
 export default ImmobileService;

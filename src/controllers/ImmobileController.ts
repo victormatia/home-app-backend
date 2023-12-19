@@ -38,6 +38,15 @@ class ImmobileController {
       : res.status(200).json(result);
   };
   
+  public updateImmobileById: RequestHandler = async (_req, res) => {
+    const { id } = _req.params;
+    const immobileInfo = _req.body; // Add this line to get the immobileInfo from the request body
+    const  { message, result } = await this._service.updateImmobileById(id, immobileInfo); // Pass both id and immobileInfo arguments
+
+    return message ? res.status(400).json({ message }) 
+      : res.status(200).json(result);
+  };
+
 }
 
 export default  ImmobileController;

@@ -71,6 +71,34 @@ class ImmobileService {
       return { message: 'Something went wrong' };
     }
   }
+
+  public async updateImmobileById(id: string, immobileInfo: Immobile): Promise<IService<Immobile>> {
+    try {
+      const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
+  
+      if (ownerId === undefined || addressId === undefined || typeId === undefined) {
+        return { message: 'ownerId, addressId, and typeId must be provided' };
+      }
+  
+      const data: Prisma.ImmobileUpdateInput = {
+        ...otherInfos,
+        address: { connect: { id: addressId } },
+        owner: { connect: { id: ownerId } },
+        type: { connect: { id: typeId } },
+      };
+  
+      const updatedImmobile = await this._model.immobile.update({
+        where: { id: id },
+        data: data,
+      });
+  
+      return { result: updatedImmobile };
+  
+    } catch (e) {
+      console.error(e);
+      return { message: 'Something went wrong' };
+    }
+  }
 }
 
 export default ImmobileService;

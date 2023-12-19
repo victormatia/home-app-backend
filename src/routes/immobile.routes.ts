@@ -14,6 +14,6 @@ router.get('/list', controller.getAll);
 router.post('/create', TokenMiddleware.validate, controller.create);
 router.get('/id::id', controller.getImmobileById);
 router.delete('/delete::id',  controller.deleteImmobileById);
-// router.post('/update', TokenMiddleware.validate, controller.);
+router.patch('/update::id', controller.updateImmobileById);
 
 export default router;

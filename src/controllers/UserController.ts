@@ -60,7 +60,7 @@ class UserController {
     try {
       const { id } = req.params;
       await this._service.delete(id);
-      return res.status(200).json({message: 'User deleted'});
+      return res.status(200).json({ message: 'User deleted' });
     } catch (e) {
       return res.status(404).json('User does not exist');
     }
@@ -75,6 +75,17 @@ class UserController {
       return res.status(404).json('User does not exist');
     }
   };
+
+  public activate = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      await this._service.activate(id);
+      return res.status(200).json('User activated');
+    } catch (e) {
+      return res.status(404).json('User does not exist');
+    }
+  };
+
 }
 
 export default UserController;

@@ -60,11 +60,15 @@ class UserService {
   }
 
   public async delete(id: string): Promise<void> {
-    this._repository.delete(id);
+    await this._repository.delete(id);
   }
 
   public async purge(id: string): Promise<void> {
-    this._repository.purge(id);
+    await this._repository.purge(id);
+  }
+
+  public async activate(id: string): Promise<void> {
+    await this._repository.activate(id);
   }
 }
 

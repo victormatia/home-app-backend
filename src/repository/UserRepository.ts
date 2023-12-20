@@ -35,11 +35,15 @@ class UserRepository {
   }
 
   async delete(id: string): Promise<void> {
-    this._model.user.update({ where: { id, deleted: false }, data: { deleted: true } });
+    await this._model.user.update({ where: { id, deleted: false }, data: { deleted: true } });
   }
 
   async purge(id: string): Promise<void> {
-    this._model.user.delete({ where: { id } });
+    await this._model.user.delete({ where: { id } });
+  }
+
+  async activate(id: string): Promise<void> {
+    await this._model.user.update({ where: { id, deleted: true }, data: { deleted: false } });
   }
 }
 

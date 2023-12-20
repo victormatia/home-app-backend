@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 import Jwt from '../auth/Jwt';
 import IService from '../interfaces/IService';
-import { CreateUserDTO } from '../interfaces/UserDto';
+import { CreateUserDTO, UniqueUserDTO } from '../interfaces/UserDto';
 import UserRepository from '../repository/UserRepository';
 
 class UserService {
@@ -45,6 +45,15 @@ class UserService {
   public async getAll(): Promise<User[]> {
 
     return this._repository.getAll();
+  }
+
+  public async findById(id: string): Promise<UniqueUserDTO> {
+    const user = await this._repository.findById(id);
+
+    if(!user) {
+      throw new Error('User does not exist');
+    }
+    return user;
   }
 }
 

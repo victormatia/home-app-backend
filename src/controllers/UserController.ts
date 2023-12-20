@@ -33,6 +33,16 @@ class UserController {
       return res.status(400).json({message: 'Somthing went wrong'});
     }
   };
+
+  public getById = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const user = await this._service.findById(id);
+      return res.status(200).json(user);
+    } catch(e) {
+      return res.status(404).json({message: 'User does not exist'});
+    }
+  };
 }
 
 export default UserController;

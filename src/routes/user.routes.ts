@@ -18,5 +18,7 @@ route.post('/sign-in', controller.login);
 route.get('/', controller.getAll);
 route.get('/:id', controller.getById);
 route.put('/:id', controller.update);
+route.delete('/:id', controller.delete);
+// route.delete('/:id/purge', controller.purge);
 
 export default route;

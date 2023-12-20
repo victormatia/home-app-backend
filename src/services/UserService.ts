@@ -1,3 +1,4 @@
+import { User } from '@prisma/client';
 import Jwt from '../auth/Jwt';
 import IService from '../interfaces/IService';
 import { CreateUserDTO } from '../interfaces/UserDto';
@@ -39,6 +40,11 @@ class UserService {
       // console.error(e);
       return { message: 'Something went wrong, user not found' };
     }
+  }
+
+  public async getAll(): Promise<User[]> {
+
+    return this._repository.getAll();
   }
 }
 

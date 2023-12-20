@@ -24,6 +24,15 @@ class UserController {
     return message ? res.status(404).json({ message }) 
       : res.status(200).json({ token: result });
   };
+
+  public getAll = async(_req: Request, res: Response) => {
+    try {
+      const users = await this._service.getAll();
+      return res.status(200).json(users);
+    } catch(e) {
+      return res.status(400).json({message: 'Somthing went wrong'});
+    }
+  };
 }
 
 export default UserController;

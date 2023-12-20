@@ -1,3 +1,4 @@
+import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import { CreateUserDTO } from '../interfaces/UserDto';
 import UserService from '../services/UserService';
@@ -43,6 +44,17 @@ class UserController {
       return res.status(404).json({message: 'User does not exist'});
     }
   };
+
+  public update = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const data: Partial<User> = req.body;
+      const user = await this._service.update(id, data);
+      return res.status(200).json(user);
+    } catch(e) {
+      return res.status(404).json({message: 'User does not exist'});
+    }
+  };  
 }
 
 export default UserController;

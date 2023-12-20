@@ -48,13 +48,16 @@ class UserService {
   }
 
   public async findById(id: string): Promise<UniqueUserDTO> {
-    const user = await this._repository.findById(id);
-
+    const user = await this._repository.findById(id, true);
     if(!user) {
       throw new Error('User does not exist');
     }
     return user;
   }
+
+  public async update(id: string, data: Partial<User>): Promise<User> {
+    return this._repository.update(id, data);
+  } 
 }
 
 export default UserService;

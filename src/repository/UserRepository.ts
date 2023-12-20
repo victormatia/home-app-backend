@@ -22,12 +22,16 @@ class UserRepository {
     return this._model.user.findUnique({ where: { email, deleted: false } });
   }
 
-  async findById(id: string): Promise<UniqueUserDTO | null> {
+  async findById(id: string, includeImmobiles: boolean): Promise<UniqueUserDTO | null> {
     return this._model.user.findUnique(
       {
         where: { id, deleted: false }, 
-        include: { owner: true, tenant: true }, 
+        include: { owner: includeImmobiles, tenant: includeImmobiles }, 
       });
+  }
+
+  async update(id: string, data: Partial<User>): Promise<User> {
+    return this._model.user.update({where: {id}, data});
   }
 }
 

@@ -17,5 +17,6 @@ route.post('/sign-up', controller.create);
 route.post('/sign-in', controller.login);
 route.get('/', controller.getAll);
 route.get('/:id', controller.getById);
+route.put('/:id', controller.update);
 
 export default route;

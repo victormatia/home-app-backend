@@ -13,8 +13,9 @@ const repository = new UserRepository(prisma);
 const service = new UserService(repository);
 const controller = new UserController(service);
 
-route.get('/', controller.getAll);
 route.post('/sign-up', controller.create);
 route.post('/sign-in', controller.login);
+route.get('/', controller.getAll);
+route.get('/:id', controller.getById);
 
 export default route;

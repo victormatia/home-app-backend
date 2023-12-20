@@ -25,13 +25,21 @@ class UserRepository {
   async findById(id: string, includeImmobiles: boolean): Promise<UniqueUserDTO | null> {
     return this._model.user.findUnique(
       {
-        where: { id, deleted: false }, 
-        include: { owner: includeImmobiles, tenant: includeImmobiles }, 
+        where: { id, deleted: false },
+        include: { owner: includeImmobiles, tenant: includeImmobiles },
       });
   }
 
   async update(id: string, data: Partial<User>): Promise<User> {
-    return this._model.user.update({where: {id}, data});
+    return this._model.user.update({ where: { id, deleted: false }, data });
+  }
+
+  async delete(id: string): Promise<void> {
+    this._model.user.update({ where: { id, deleted: false }, data: { deleted: true } });
+  }
+
+  async purge(id: string): Promise<void> {
+    this._model.user.delete({ where: { id } });
   }
 }
 

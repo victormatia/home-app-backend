@@ -57,7 +57,15 @@ class UserService {
 
   public async update(id: string, data: Partial<User>): Promise<User> {
     return this._repository.update(id, data);
-  } 
+  }
+
+  public async delete(id: string): Promise<void> {
+    this._repository.delete(id);
+  }
+
+  public async purge(id: string): Promise<void> {
+    this._repository.purge(id);
+  }
 }
 
 export default UserService;

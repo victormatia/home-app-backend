@@ -80,16 +80,19 @@ class ImmobileService {
         return { message: 'ownerId, addressId, and typeId must be provided' };
       }
   
+      const address = await this._model.address.findUnique({ where: { id: addressId } });
+      if (!address) {
+        return { message: 'Address with the given id does not exist' };
+      }
+  
       const data: Prisma.ImmobileUpdateInput = {
         ...otherInfos,
-        address: { connect: { id: addressId } },
         owner: { connect: { id: ownerId } },
-        type: { connect: { id: typeId } },
       };
   
       const updatedImmobile = await this._model.immobile.update({
         where: { id: id },
-        data: data,
+        data: data, 
       });
   
       return { result: updatedImmobile };

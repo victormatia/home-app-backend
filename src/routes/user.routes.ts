@@ -13,8 +13,13 @@ const repository = new UserRepository(prisma);
 const service = new UserService(repository);
 const controller = new UserController(service);
 
-// route.get('/list', controller.getAll);
 route.post('/sign-up', controller.create);
 route.post('/sign-in', controller.login);
+route.get('/', controller.getAll);
+route.get('/:id', controller.getById);
+route.put('/:id', controller.update);
+route.delete('/:id', controller.delete);
+route.delete('/:id/purge', controller.purge);
+route.put('/:id/activate', controller.activate);
 
 export default route;

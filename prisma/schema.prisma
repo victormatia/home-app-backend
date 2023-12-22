@@ -73,7 +73,7 @@ model Immobile {
   tenant  User?           @relation("tenant", fields: [tenantId], references: [id])
   address Address         @relation(fields: [addressId], references: [id])
   type    ImmobileType    @relation(fields: [typeId], references: [id])
-  photos  ImmobilePhoto[]
+  photos  ImmobilePhoto[] 
 
   @@map("immobiles")
 }

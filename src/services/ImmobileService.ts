@@ -46,6 +46,62 @@ class ImmobileService {
       return { message: 'Something went wrong' };
     }
   }
+
+  public async getImmobileById(id: string): Promise<IService<Immobile>> {
+    try {
+      const immobile = await this._model.immobile.findUnique({where: { id: id }});
+  
+      return { result: immobile || null };
+  
+    } catch (e) {
+      console.error(e);
+      return { message: 'Something went wrong' };
+    }
+  }
+
+  public async deleteImmobileById(id: string): Promise<IService<Immobile>> {
+    try {
+      await this._model.immobilePhoto.deleteMany({where: { immobileId: id }});
+      const immobile = await this._model.immobile.delete({where: { id: id }});
+  
+      return { result: immobile || null };
+  
+    } catch (e) {
+      console.error(e);
+      return { message: 'Something went wrong' };
+    }
+  }
+
+  public async updateImmobileById(id: string, immobileInfo: Immobile): Promise<IService<Immobile>> {
+    try {
+      const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
+  
+      if (ownerId === undefined || addressId === undefined || typeId === undefined) {
+        return { message: 'ownerId, addressId, and typeId must be provided' };
+      }
+  
+      const address = await this._model.address.findUnique({ where: { id: addressId } });
+      if (!address) {
+        return { message: 'Address with the given id does not exist' };
+      }
+  
+      const data: Prisma.ImmobileUpdateInput = {
+        ...otherInfos,
+        owner: { connect: { id: ownerId } },
+      };
+  
+      const updatedImmobile = await this._model.immobile.update({
+        where: { id: id },
+        data: data, 
+      });
+  
+      return { result: updatedImmobile };
+  
+    } catch (e) {
+      console.error(e);
+      return { message: 'Something went wrong' };
+    }
+  }
 }
 
 export default ImmobileService;

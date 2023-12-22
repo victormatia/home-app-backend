@@ -1,5 +1,5 @@
 interface IService<T> {
-  result?: T,
+  result?: T | null,
   message?: string
 }
 

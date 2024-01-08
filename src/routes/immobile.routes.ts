@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 const service = new ImmobileService(prisma);
 const controller = new ImmobileController(service);
 
-router.get('/list', TokenMiddleware.validate, controller.getAll);
+router.get('/list', controller.getAll);
 router.post('/create', TokenMiddleware.validate, controller.create);
 router.get('/id::id', TokenMiddleware.validate, controller.getImmobileById);
 router.delete('/delete::id', TokenMiddleware.validate, controller.deleteImmobileById);

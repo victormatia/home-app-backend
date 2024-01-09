@@ -2,6 +2,7 @@ import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import { CreateUserDTO } from '../interfaces/UserDto';
 import UserService from '../services/UserService';
+import { UserErrors, UserSuccess } from '../util/messages';
 
 class UserController {
   private _service: UserService;
@@ -41,7 +42,7 @@ class UserController {
       const user = await this._service.findById(id);
       return res.status(200).json(user);
     } catch (e) {
-      return res.status(404).json({ message: 'User does not exist' });
+      return res.status(404).json({ message: UserErrors.USER_NOT_FOUND });
     }
   };
 
@@ -52,7 +53,7 @@ class UserController {
       const user = await this._service.update(id, data);
       return res.status(200).json(user);
     } catch (e) {
-      return res.status(404).json({ message: 'User does not exist' });
+      return res.status(404).json({ message: UserErrors.USER_NOT_FOUND });
     }
   };
 
@@ -60,9 +61,9 @@ class UserController {
     try {
       const { id } = req.params;
       await this._service.delete(id);
-      return res.status(200).json({ message: 'User deleted' });
+      return res.status(200).json({ message: UserSuccess.USER_DELETED });
     } catch (e) {
-      return res.status(404).json('User does not exist');
+      return res.status(404).json(UserErrors.USER_NOT_FOUND);
     }
   };
 
@@ -70,9 +71,9 @@ class UserController {
     try {
       const { id } = req.params;
       await this._service.purge(id);
-      return res.status(200).json('User permanently deleted');
+      return res.status(200).json({message: UserSuccess.USER_PURGED});
     } catch (e) {
-      return res.status(404).json('User does not exist');
+      return res.status(404).json(UserErrors.USER_NOT_FOUND);
     }
   };
 
@@ -80,9 +81,9 @@ class UserController {
     try {
       const { id } = req.params;
       await this._service.activate(id);
-      return res.status(200).json('User activated');
+      return res.status(200).json({message: UserSuccess.USER_ACTIVATED});
     } catch (e) {
-      return res.status(404).json('User does not exist');
+      return res.status(404).json({message: UserErrors.USER_NOT_FOUND});
     }
   };
 

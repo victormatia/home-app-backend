@@ -1,4 +1,4 @@
-import { RequestHandler } from 'express';
+import { Request, Response } from 'express';
 import ImmobileService from '../services/ImmobileService';
 
 class ImmobileController {
@@ -8,21 +8,21 @@ class ImmobileController {
     this._service = service;
   }
 
-  public create: RequestHandler = async (req, res) => {
+  public create = async (req: Request, res: Response) => {
     const  { message, result } = await this._service.create(req.body);
 
     return message ? res.status(400).json({ message }) 
       : res.status(201).json(result);
   };
   
-  public getAll: RequestHandler = async (_req, res) => {
+  public getAll = async (_req: Request, res: Response) => {
     const  { message, result } = await this._service.getAll();
 
     return message ? res.status(400).json({ message }) 
       : res.status(200).json(result);
   }; 
 
-  public getImmobileById: RequestHandler = async (_req, res) => {
+  public getImmobileById = async (_req: Request, res: Response) => {
     const { id } = _req.params;
     const  { message, result } = await this._service.getImmobileById(id);
 
@@ -30,7 +30,7 @@ class ImmobileController {
       : res.status(200).json(result);
   }; 
 
-  public deleteImmobileById: RequestHandler = async (_req, res) => {
+  public deleteImmobileById = async (_req: Request, res: Response) => {
     const { id } = _req.params;
     const  { message, result } = await this._service.deleteImmobileById(id);
 
@@ -38,7 +38,7 @@ class ImmobileController {
       : res.status(200).json(result);
   };
   
-  public updateImmobileById: RequestHandler = async (_req, res) => {
+  public updateImmobileById = async (_req: Request, res: Response) => {
     const { id } = _req.params;
     const immobileInfo = _req.body; 
     const  { message, result } = await this._service.updateImmobileById(id, immobileInfo); 

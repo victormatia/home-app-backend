@@ -1,5 +1,6 @@
 import { Immobile, Prisma, PrismaClient } from '@prisma/client';
 import IService from '../interfaces/IService';
+import { CreateImmobileDTO } from '../interfaces/ImmobileDto';
 import { GenericErrors, ImmobileErrors } from '../util/messages';
 
 class ImmobileService {
@@ -9,7 +10,7 @@ class ImmobileService {
     this._model = model;
   }
 
-  public async create(immobileInfo: Immobile): Promise<IService<Immobile>> {
+  public async create(immobileInfo: CreateImmobileDTO): Promise<IService<Immobile>> {
     try {
       const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
 

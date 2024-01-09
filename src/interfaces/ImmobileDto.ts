@@ -1,7 +1,5 @@
 export interface CreateImmobileDTO {
-    id: string;
     ownerId: string;
-    tenantId: string | null;
     addressId: string;
     typeId: string;
     price: number;
@@ -11,4 +9,17 @@ export interface CreateImmobileDTO {
     sqrFootage: number;
     petFriendly: boolean;
     description: string;
+}
+
+export interface UpdateImmoblieDTO {
+    ownerId: string;
+    addressId: string;
+    typeId: string;
+    price?: number;
+    bedroomsQty?: number;
+    bathroomsQty?: number;
+    parkingQty?: number;
+    sqrFootage?: number;
+    petFriendly?: boolean;
+    description?: string;
 }

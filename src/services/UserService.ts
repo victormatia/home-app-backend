@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 import Jwt from '../auth/Jwt';
 import IService from '../interfaces/IService';
-import { CreateUserDTO, UniqueUserDTO } from '../interfaces/UserDto';
+import { CreateUserDTO, UniqueUserDTO, UpdateUserDTO } from '../interfaces/UserDto';
 import UserRepository from '../repository/UserRepository';
 
 class UserService {
@@ -55,7 +55,7 @@ class UserService {
     return user;
   }
 
-  public async update(id: string, data: Partial<User>): Promise<User> {
+  public async update(id: string, data: UpdateUserDTO): Promise<User> {
     return this._repository.update(id, data);
   }
 

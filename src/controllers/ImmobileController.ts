@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { CreateImmobileDTO, UpdateImmoblieDTO } from '../interfaces/ImmobileDto';
 import ImmobileService from '../services/ImmobileService';
 
 class ImmobileController {
@@ -9,7 +10,8 @@ class ImmobileController {
   }
 
   public create = async (req: Request, res: Response) => {
-    const  { message, result } = await this._service.create(req.body);
+    const data: CreateImmobileDTO = req.body;
+    const  { message, result } = await this._service.create(data);
 
     return message ? res.status(400).json({ message }) 
       : res.status(201).json(result);
@@ -40,7 +42,7 @@ class ImmobileController {
   
   public updateImmobileById = async (_req: Request, res: Response) => {
     const { id } = _req.params;
-    const immobileInfo = _req.body; 
+    const immobileInfo: UpdateImmoblieDTO = _req.body; 
     const  { message, result } = await this._service.updateImmobileById(id, immobileInfo); 
 
     return message ? res.status(400).json({ message }) 

@@ -1,6 +1,5 @@
-import { User } from '@prisma/client';
 import { Request, Response } from 'express';
-import { CreateUserDTO } from '../interfaces/UserDto';
+import { CreateUserDTO, UpdateUserDTO } from '../interfaces/UserDto';
 import UserService from '../services/UserService';
 import { GenericErrors, UserErrors, UserSuccess } from '../util/messages';
 
@@ -49,7 +48,7 @@ class UserController {
   public update = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const data: Partial<User> = req.body;
+      const data: UpdateUserDTO = req.body;
       const user = await this._service.update(id, data);
       return res.status(200).json(user);
     } catch (e) {

@@ -9,6 +9,14 @@ export interface CreateUserDTO {
   birthDate: Date | null;
 }
 
+export interface UpdateUserDTO {
+  email?: string
+  name?: string
+  password?: string
+  cpf?: string
+  birthDate?: Date 
+}
+
 export interface UniqueUserDTO extends User {
   owner: Immobile[],
   tenant: Immobile[] 

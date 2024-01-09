@@ -1,6 +1,6 @@
 import { Immobile, Prisma, PrismaClient } from '@prisma/client';
 import IService from '../interfaces/IService';
-import { CreateImmobileDTO } from '../interfaces/ImmobileDto';
+import { CreateImmobileDTO, UpdateImmoblieDTO } from '../interfaces/ImmobileDto';
 import { GenericErrors, ImmobileErrors } from '../util/messages';
 
 class ImmobileService {
@@ -74,7 +74,7 @@ class ImmobileService {
     }
   }
 
-  public async updateImmobileById(id: string, immobileInfo: Immobile): Promise<IService<Immobile>> {
+  public async updateImmobileById(id: string, immobileInfo: UpdateImmoblieDTO): Promise<IService<Immobile>> {
     try {
       const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
   

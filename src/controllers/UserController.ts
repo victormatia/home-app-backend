@@ -2,7 +2,7 @@ import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import { CreateUserDTO } from '../interfaces/UserDto';
 import UserService from '../services/UserService';
-import { UserErrors, UserSuccess } from '../util/messages';
+import { GenericErrors, UserErrors, UserSuccess } from '../util/messages';
 
 class UserController {
   private _service: UserService;
@@ -32,7 +32,7 @@ class UserController {
       const users = await this._service.getAll();
       return res.status(200).json(users);
     } catch (e) {
-      return res.status(400).json({ message: 'Somthing went wrong' });
+      return res.status(400).json({ message: GenericErrors.UNKNOWN_ERROR });
     }
   };
 
@@ -63,7 +63,7 @@ class UserController {
       await this._service.delete(id);
       return res.status(200).json({ message: UserSuccess.USER_DELETED });
     } catch (e) {
-      return res.status(404).json(UserErrors.USER_NOT_FOUND);
+      return res.status(404).json({message: UserErrors.USER_NOT_FOUND});
     }
   };
 

@@ -23,6 +23,9 @@ class MockGenerator {
       ...userData,
       createdAt: chance.date(),
       updatedAt: chance.date(),
+      deleted: false,
+      role: 'USER',
+      
     };
   }
 

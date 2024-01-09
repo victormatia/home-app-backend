@@ -1,5 +1,6 @@
 import { Immobile, Prisma, PrismaClient } from '@prisma/client';
 import IService from '../interfaces/IService';
+import { GenericErrors, ImmobileErrors } from '../util/messages';
 
 class ImmobileService {
   private _model: PrismaClient;
@@ -25,7 +26,7 @@ class ImmobileService {
 
     } catch (e) {
       console.error(e);
-      return { message: 'Something went wrong, new immobile was not registered' };
+      return { message: ImmobileErrors.IMMOBILE_NOT_CREATED };
     }
   }
 
@@ -43,7 +44,7 @@ class ImmobileService {
 
     } catch (e) {
       console.error(e);
-      return { message: 'Something went wrong' };
+      return { message: GenericErrors.UNKNOWN_ERROR };
     }
   }
 
@@ -55,7 +56,7 @@ class ImmobileService {
   
     } catch (e) {
       console.error(e);
-      return { message: 'Something went wrong' };
+      return { message: GenericErrors.UNKNOWN_ERROR };
     }
   }
 
@@ -68,7 +69,7 @@ class ImmobileService {
   
     } catch (e) {
       console.error(e);
-      return { message: 'Something went wrong' };
+      return { message: GenericErrors.UNKNOWN_ERROR };
     }
   }
 
@@ -77,12 +78,12 @@ class ImmobileService {
       const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
   
       if (ownerId === undefined || addressId === undefined || typeId === undefined) {
-        return { message: 'ownerId, addressId, and typeId must be provided' };
+        return { message: ImmobileErrors.UPDATE_INFO_INCOMPLETE };
       }
   
       const address = await this._model.address.findUnique({ where: { id: addressId } });
       if (!address) {
-        return { message: 'Address with the given id does not exist' };
+        return { message: ImmobileErrors.ADDRESS_NOT_FOUND };
       }
   
       const data: Prisma.ImmobileUpdateInput = {
@@ -99,7 +100,7 @@ class ImmobileService {
   
     } catch (e) {
       console.error(e);
-      return { message: 'Something went wrong' };
+      return { message: GenericErrors.UNKNOWN_ERROR };
     }
   }
 }

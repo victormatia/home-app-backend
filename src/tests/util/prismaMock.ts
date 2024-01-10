@@ -1,5 +1,5 @@
 import sinon from 'sinon';
-import { prisma } from '../../routes/user.routes';
+import { prisma } from '../../routes/userRoutes';
 
 const prismaMock = { 
   user: { 

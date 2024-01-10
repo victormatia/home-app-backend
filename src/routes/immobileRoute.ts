@@ -1,8 +1,8 @@
+import { PrismaClient } from '@prisma/client';
 import { Router } from 'express';
 import ImmobileController from '../controllers/ImmobileController';
-import ImmobileService from '../services/ImmobileService';
-import { PrismaClient } from '@prisma/client';
 import { TokenMiddleware } from '../middlewares/TokenMiddleware';
+import ImmobileService from '../services/ImmobileService';
 
 const router = Router();
 
@@ -12,8 +12,8 @@ const controller = new ImmobileController(service);
 
 router.get('/list', controller.getAll);
 router.post('/create', TokenMiddleware.validate, controller.create);
-router.get('/id::id', TokenMiddleware.validate, controller.getImmobileById);
-router.delete('/delete::id', TokenMiddleware.validate, controller.deleteImmobileById);
-router.patch('/update::id', TokenMiddleware.validate, controller.updateImmobileById);
+router.get('/list/:id', TokenMiddleware.validate, controller.getImmobileById);
+router.delete('/delete/:id', TokenMiddleware.validate, controller.deleteImmobileById);
+router.patch('/update/:id', TokenMiddleware.validate, controller.updateImmobileById);
 
 export default router;

@@ -15,11 +15,11 @@ const controller = new UserController(service);
 
 route.post('/sign-up', controller.create);
 route.post('/sign-in', controller.login);
-route.get('/', controller.getAll);
-route.get('/:id', controller.getById);
-route.put('/:id', controller.update);
-route.delete('/:id', controller.delete);
-route.delete('/:id/purge', controller.purge);
-route.put('/:id/activate', controller.activate);
+route.get('/list', controller.getAll);
+route.get('/list/:id', controller.getById);
+route.put('/update/:id', controller.update);
+route.delete('/delete/:id', controller.delete);
+route.delete('/purge/:id', controller.purge);
+route.put('/activate/:id', controller.activate);
 
 export default route;

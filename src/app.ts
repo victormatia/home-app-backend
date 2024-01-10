@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 
 import { errorMiddleware } from './middlewares/ErrorMiddleware';
-import immobileRoutes from './routes/immobile.routes';
-import userRoutes from './routes/user.routes';
+import immobileRoutes from './routes/immobileRoute';
+import userRoutes from './routes/userRoutes';
 
 class App {
   // melhoria: aplicar desacoplamento de depedência
@@ -18,6 +18,7 @@ class App {
 
     this._server.use('/user', userRoutes);
     this._server.use('/immobile', immobileRoutes);
+    this._server.use(errorMiddleware);
   }
 
   private config():void {
@@ -30,7 +31,6 @@ class App {
 
     this._server.use(express.json());
     this._server.use(accessControl);
-    this._server.use(errorMiddleware);
   }
 
   public init(port: string | number):void {

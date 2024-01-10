@@ -1,5 +1,6 @@
 export enum GenericErrors {
-  UNKNOWN_ERROR = 'Something went wrong'
+  UNKNOWN_ERROR = 'Something went wrong',
+  SERVER_ERROR = 'Server error'
 }
 
 export enum UserErrors {

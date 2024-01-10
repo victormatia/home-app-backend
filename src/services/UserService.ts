@@ -1,5 +1,7 @@
 import { User } from '@prisma/client';
 import Jwt from '../auth/Jwt';
+import { UserNotFoundError } from '../error/UserNotFoundError';
+import { UserNotRegisteredError } from '../error/UserNotRegisteredError';
 import IService from '../interfaces/IService';
 import { CreateUserDTO, UniqueUserDTO, UpdateUserDTO } from '../interfaces/UserDto';
 import UserRepository from '../repository/UserRepository';
@@ -18,9 +20,8 @@ class UserService {
 
       return { result: token };
 
-    } catch (e) {
-      // console.error(e);
-      return { message: 'Something went wrong, user was not registered' };
+    } catch (err) {
+      throw new UserNotRegisteredError();
     }
   }
 
@@ -29,46 +30,60 @@ class UserService {
       const user = await this._repository.findByEmail(userEmail);
 
       if (!user) {
-        return { message: 'User not found' };
+        throw new UserNotFoundError();
       }
 
       const token = Jwt.createToken(user);
 
       return { result: token };
 
-    } catch (e) {
-      // console.error(e);
-      return { message: 'Something went wrong, user not found' };
+    } catch (err) {
+      throw new UserNotFoundError();
     }
   }
 
   public async getAll(): Promise<User[]> {
-
     return this._repository.getAll();
   }
 
   public async findById(id: string): Promise<UniqueUserDTO> {
     const user = await this._repository.findById(id, true);
     if(!user) {
-      throw new Error('User does not exist');
+      throw new UserNotFoundError();
     }
     return user;
   }
 
   public async update(id: string, data: UpdateUserDTO): Promise<User> {
-    return this._repository.update(id, data);
+    try {
+      return this._repository.update(id, data);
+    } catch(err) {
+      throw new UserNotFoundError();
+    }
   }
 
   public async delete(id: string): Promise<void> {
-    await this._repository.delete(id);
+    try {
+      await this._repository.delete(id);
+    } catch(err) {
+      throw new UserNotFoundError();
+    }
   }
 
   public async purge(id: string): Promise<void> {
-    await this._repository.purge(id);
+    try {
+      await this._repository.purge(id);
+    } catch(err) {
+      throw new UserNotFoundError();
+    }
   }
 
   public async activate(id: string): Promise<void> {
-    await this._repository.activate(id);
+    try {
+      await this._repository.activate(id);
+    } catch(err) {
+      throw new UserNotFoundError();
+    }
   }
 }
 

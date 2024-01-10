@@ -11,7 +11,7 @@ export interface CreateImmobileDTO {
     description: string;
 }
 
-export interface UpdateImmoblieDTO {
+export interface UpdateImmobileDTO {
     ownerId: string;
     addressId: string;
     typeId: string;

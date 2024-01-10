@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import { CreateImmobileDTO, UpdateImmoblieDTO } from '../interfaces/ImmobileDto';
+import { NextFunction, Request, Response } from 'express';
+import { CreateImmobileDTO, UpdateImmobileDTO } from '../interfaces/ImmobileDto';
 import ImmobileService from '../services/ImmobileService';
 
 class ImmobileController {
@@ -9,44 +9,54 @@ class ImmobileController {
     this._service = service;
   }
 
-  public create = async (req: Request, res: Response) => {
+  public create = async (req: Request, res: Response, next: NextFunction) => {
     const data: CreateImmobileDTO = req.body;
-    const  { message, result } = await this._service.create(data);
-
-    return message ? res.status(400).json({ message }) 
-      : res.status(201).json(result);
+    try {
+      const result  = await this._service.create(data);
+      return res.status(201).json(result);
+    } catch(err) {
+      return next(err);
+    }
   };
   
-  public getAll = async (_req: Request, res: Response) => {
-    const  { message, result } = await this._service.getAll();
-
-    return message ? res.status(400).json({ message }) 
-      : res.status(200).json(result);
+  public getAll = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result  = await this._service.getAll();
+      return res.status(200).json(result);
+    } catch(err) {
+      return next(err);
+    }
   }; 
 
-  public getImmobileById = async (_req: Request, res: Response) => {
+  public getImmobileById = async (_req: Request, res: Response, next: NextFunction) => {
     const { id } = _req.params;
-    const  { message, result } = await this._service.getImmobileById(id);
-
-    return message ? res.status(400).json({ message }) 
-      : res.status(200).json(result);
+    try {
+      const result = await this._service.getImmobileById(id);
+      return res.status(200).json(result);
+    } catch(err) {
+      return next(err);
+    }
   }; 
 
-  public deleteImmobileById = async (_req: Request, res: Response) => {
+  public deleteImmobileById = async (_req: Request, res: Response, next: NextFunction) => {
     const { id } = _req.params;
-    const  { message, result } = await this._service.deleteImmobileById(id);
-
-    return message ? res.status(400).json({ message }) 
-      : res.status(200).json(result);
+    try {
+      const result = await this._service.deleteImmobileById(id);
+      return res.status(200).json(result);
+    } catch(err) {
+      return next(err);
+    }
   };
   
-  public updateImmobileById = async (_req: Request, res: Response) => {
+  public updateImmobileById = async (_req: Request, res: Response, next: NextFunction) => {
     const { id } = _req.params;
-    const immobileInfo: UpdateImmoblieDTO = _req.body; 
-    const  { message, result } = await this._service.updateImmobileById(id, immobileInfo); 
-
-    return message ? res.status(400).json({ message }) 
-      : res.status(200).json(result);
+    try {
+      const immobileInfo: UpdateImmobileDTO = _req.body; 
+      const result = await this._service.updateImmobileById(id, immobileInfo); 
+      return res.status(200).json(result);
+    } catch(err) {
+      return next(err);
+    }
   };
 
 }

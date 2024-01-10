@@ -1,108 +1,56 @@
-import { Immobile, Prisma, PrismaClient } from '@prisma/client';
-import IService from '../interfaces/IService';
-import { CreateImmobileDTO, UpdateImmoblieDTO } from '../interfaces/ImmobileDto';
-import { GenericErrors, ImmobileErrors } from '../util/messages';
+import { Immobile } from '@prisma/client';
+import { ImmobileIncompleteInfoError } from '../error/ImmobileIncompleteInfoError';
+import { ImmobileNotFoundError } from '../error/ImmobileNotFoundError';
+import { CreateImmobileDTO, UpdateImmobileDTO } from '../interfaces/ImmobileDto';
+import ImmobileRepository from '../repository/ImmobileRepository';
 
 class ImmobileService {
-  private _model: PrismaClient;
+  
 
-  constructor(model: PrismaClient) {
-    this._model = model;
+  constructor(private _repository: ImmobileRepository) {
   }
 
-  public async create(immobileInfo: CreateImmobileDTO): Promise<IService<Immobile>> {
+  public async create(immobileInfo: CreateImmobileDTO): Promise<Immobile> {
+    const registeredImmobile = await this._repository.create(immobileInfo);
+    return registeredImmobile;
+  }
+
+  public async getAll(): Promise<Immobile[]> {
+
+    const allImmobiles = await this._repository.getAll();
+    return allImmobiles;
+  }
+
+  public async getImmobileById(id: string): Promise<Immobile>
+  {
+
+    const immobile = await this._repository.findById(id);
+    if(!immobile) {
+      throw new ImmobileNotFoundError();
+    }
+    return immobile;
+
+  }
+
+  public async deleteImmobileById(id: string): Promise<Immobile> {
     try {
-      const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
-
-      const data: Prisma.ImmobileCreateInput = {
-        ...otherInfos,
-        address: { connect: { id: addressId } },
-        owner: { connect: { id: ownerId } },
-        type: { connect: { id: typeId } },
-      };
-
-      const registeredImmobile = await this._model.immobile.create({ data });
-
-      return { result: registeredImmobile };
-
-    } catch (e) {
-      console.error(e);
-      return { message: ImmobileErrors.IMMOBILE_NOT_CREATED };
+      const immobile = await this._repository.delete(id);
+      return immobile;
+    } catch (err) {
+      throw new ImmobileNotFoundError();
     }
   }
 
-  public async getAll(): Promise<IService<Immobile[]>> {
-    try {
-      const allImmobiles = await this._model.immobile.findMany({
-        include: {
-          address: true,
-          type: true,
-          photos: {select: {photo: { select: { url: true } }}},
-        },
-      });
-
-      return { result: allImmobiles };
-
-    } catch (e) {
-      console.error(e);
-      return { message: GenericErrors.UNKNOWN_ERROR };
+  public async updateImmobileById(id: string, immobileInfo: UpdateImmobileDTO): Promise<Immobile> {
+    const { ownerId, addressId, typeId } = immobileInfo;
+  
+    if (ownerId === undefined || addressId === undefined || typeId === undefined) {
+      throw new ImmobileIncompleteInfoError();
     }
-  }
-
-  public async getImmobileById(id: string): Promise<IService<Immobile>> {
-    try {
-      const immobile = await this._model.immobile.findUnique({where: { id: id }});
   
-      return { result: immobile || null };
+    const updatedImmobile = this._repository.update(id, immobileInfo);
   
-    } catch (e) {
-      console.error(e);
-      return { message: GenericErrors.UNKNOWN_ERROR };
-    }
-  }
-
-  public async deleteImmobileById(id: string): Promise<IService<Immobile>> {
-    try {
-      await this._model.immobilePhoto.deleteMany({where: { immobileId: id }});
-      const immobile = await this._model.immobile.delete({where: { id: id }});
-  
-      return { result: immobile || null };
-  
-    } catch (e) {
-      console.error(e);
-      return { message: GenericErrors.UNKNOWN_ERROR };
-    }
-  }
-
-  public async updateImmobileById(id: string, immobileInfo: UpdateImmoblieDTO): Promise<IService<Immobile>> {
-    try {
-      const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
-  
-      if (ownerId === undefined || addressId === undefined || typeId === undefined) {
-        return { message: ImmobileErrors.UPDATE_INFO_INCOMPLETE };
-      }
-  
-      const address = await this._model.address.findUnique({ where: { id: addressId } });
-      if (!address) {
-        return { message: ImmobileErrors.ADDRESS_NOT_FOUND };
-      }
-  
-      const data: Prisma.ImmobileUpdateInput = {
-        ...otherInfos,
-        owner: { connect: { id: ownerId } },
-      };
-  
-      const updatedImmobile = await this._model.immobile.update({
-        where: { id: id },
-        data: data, 
-      });
-  
-      return { result: updatedImmobile };
-  
-    } catch (e) {
-      console.error(e);
-      return { message: GenericErrors.UNKNOWN_ERROR };
-    }
+    return updatedImmobile;
   }
 }
 

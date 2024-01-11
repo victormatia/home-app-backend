@@ -49,7 +49,14 @@ class ImmobileService {
 
   public async getImmobileById(id: string): Promise<IService<Immobile>> {
     try {
-      const immobile = await this._model.immobile.findUnique({where: { id: id }});
+      const immobile = await this._model.immobile.findUnique({
+        where: { id: id }, 
+        include: {
+          address: true,
+          type: true,
+          photos: {select: {photo: { select: { url: true } }}},
+        },
+      });
   
       return { result: immobile || null };
   

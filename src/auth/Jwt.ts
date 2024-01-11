@@ -1,4 +1,5 @@
 import { sign, verify } from 'jsonwebtoken';
+import { InvalidTokenError } from '../error/InvalidTokenError';
 
 export default class Jwt {
   static secret: string = process.env.SECRET || 'temporary_secret';
@@ -14,7 +15,7 @@ export default class Jwt {
     try {
       return verify(token, Jwt.secret);
     } catch(e) {
-      throw new Error('Invalid token');
+      throw new InvalidTokenError();
     }
   }
 }

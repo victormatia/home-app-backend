@@ -5,7 +5,7 @@ export enum GenericErrors {
 
 export enum UserErrors {
   USER_NOT_FOUND = 'User not found',
-  USER_NOT_REGISTERED = 'Something went wrong, user was not registered'
+  USER_NOT_REGISTERED = 'Something went wrong, user was not registered',
 }
 
 export enum ImmobileErrors {
@@ -19,4 +19,9 @@ export enum UserSuccess {
   USER_DELETED = 'User deleted',
   USER_PURGED = 'User permanently deleted',
   USER_ACTIVATED = 'User activated'
+}
+
+export enum AuthorizationErrors {
+  TOKEN_NOT_FOUND = 'Token not found',
+  INVALID_TOKEN = 'Invalid token'
 }

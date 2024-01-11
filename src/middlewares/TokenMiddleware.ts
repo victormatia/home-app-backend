@@ -1,17 +1,18 @@
-import { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import Jwt from '../auth/Jwt';
+import { AuthorizationErrors } from '../util/messages';
 
 export class TokenMiddleware {
-  static validate: RequestHandler = (req, res, next) => {
+  static validate = (req: Request, res: Response, next: NextFunction) => {
     const { authorization } = req.headers;
 
-    if(!authorization) return res.status(400).json({ message: 'Token not found' });
+    if(!authorization) return res.status(400).json({ message: AuthorizationErrors.TOKEN_NOT_FOUND });
 
     try {
       Jwt.verifyToken(authorization);
-      next();
+      return next();
     } catch(e) {
-      res.status(401).json({ message: 'Invalid token' });
+      return res.status(401).json({ message: AuthorizationErrors.INVALID_TOKEN});
     }
   };
 }

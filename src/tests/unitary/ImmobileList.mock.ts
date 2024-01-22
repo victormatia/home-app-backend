@@ -218,5 +218,48 @@ const ImmobileList:Immobile[] = [
       },
     ],
   },
+  {
+    'id': '002',
+    'ownerId': 'wrong-owner-id-to-test-error-handling',
+    'tenantId': null,
+    'addressId': '004',
+    'typeId': '002',
+    'price': new Prisma.Decimal(500),
+    'bedroomsQty': 2,
+    'bathroomsQty': 2,
+    'parkingQty': 0,
+    'sqrFootage': new Prisma.Decimal(70),
+    'petFriendly': true,
+    'description': 'Apartamento espaçoso com 70m², 2 quartos, sendo uma suíte, e com um banheiro social.',
+    'createdAt': new Date('2023-12-13T17:48:51.060Z'),
+    'updatedAt': new Date('2023-12-13T17:48:51.060Z'),
+    'address': {
+      'id': '004',
+      'street': 'Rua 04',
+      'burgh': 'Aldeota',
+      'city': 'Fortaleza',
+      'state': 'Ceará',
+      'postalCode': '06803-440',
+      'number': 4,
+      'apto': 0,
+      'complement': 'Próximo ao bar do Mozá',
+      'createdAt': new Date('2023-12-13T17:48:51.042Z'),
+      'updatedAt': new Date('2023-12-13T17:48:51.042Z'),
+    },
+    'type': {
+      'id': '002',
+      'type': 'apartamento',
+    },
+    'photos': [
+      {
+        'id': '000',
+        'url': 'https://images.unsplash.com/photo-1614568742191-1ec6d6c183b3?auto=format&fit=crop&q=60&w=500&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8NTN8fHxlbnwwfHx8fHw%3D',
+      },
+      {
+        'id': '001',
+        'url': 'https://images.unsplash.com/photo-1614568054271-2381b5b1beab?auto=format&fit=crop&q=60&w=500&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8NTV8fHxlbnwwfHx8fHw%3D',
+      },
+    ],
+  },
 ];
 export default ImmobileList;

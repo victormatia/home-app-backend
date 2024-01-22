@@ -26,7 +26,10 @@ class UserRepository {
     return this._model.user.findUnique(
       {
         where: { id, deleted: false },
-        include: { owner: includeImmobiles, tenant: includeImmobiles },
+        include: {
+          owner: {include: { address: true, photos: { select: { photo: { select: { url: true } }}} }},
+          tenant: includeImmobiles,
+        },
       });
   }
 

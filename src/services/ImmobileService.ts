@@ -58,13 +58,18 @@ class ImmobileService {
         },
       });
   
-      return { result: immobile || null };
+      if (immobile === null) {
+        return { message: 'Immobile not found', status: 400 };
+      }
+  
+      return { result: immobile };
   
     } catch (e) {
       console.error(e);
-      return { message: 'Something went wrong' };
+      return { message: 'Something went wrong', status: 500 };
     }
   }
+  
 
   public async deleteImmobileById(id: string): Promise<IService<Immobile>> {
     try {

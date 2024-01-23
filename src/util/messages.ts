@@ -23,5 +23,6 @@ export enum UserSuccess {
 
 export enum AuthorizationErrors {
   TOKEN_NOT_FOUND = 'Token not found',
-  INVALID_TOKEN = 'Invalid token'
+  INVALID_TOKEN = 'Invalid token',
+  ACCESS_FORBIDEN = 'Access not alowed'
 }

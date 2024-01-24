@@ -15,7 +15,7 @@ class UserController {
     const { message, result } = await this._service.create(data);
 
     return message ? res.status(400).json({ message })
-      : res.status(201).json({ token: result });
+      : res.status(201).json( result );
   };
 
   public login = async (req: Request, res: Response) => {
@@ -23,7 +23,7 @@ class UserController {
     const { message, result } = await this._service.login(email);
 
     return message ? res.status(404).json({ message })
-      : res.status(200).json({ token: result });
+      : res.status(200).json( result );
   };
 
   public getAll = async (_req: Request, res: Response) => {

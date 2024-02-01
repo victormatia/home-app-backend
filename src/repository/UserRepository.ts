@@ -27,10 +27,16 @@ class UserRepository {
       {
         where: { id, deleted: false },
         include: {
-          owner: {include: { address: true, photos: { select: { photo: { select: { url: true } }}} }},
+          owner: {
+            include: {
+              address: true,            
+              photos: { select: { photo: { select: { url: true } }}}, 
+            },
+          },
           tenant: includeImmobiles,
+          favoriteImmobile: { select: { immobileId: true }}, 
         },
-      });
+      }) as Promise<UniqueUserDTO | null>;
   }
 
   async update(id: string, data: Partial<User>): Promise<User> {

@@ -11,16 +11,17 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  name      String?
-  email     String    @unique
-  password  String?
-  cpf       String?   @unique
-  birthDate DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  role      Role      @default(USER)
-  deleted   Boolean   @default(false)
+  id               String             @id @default(uuid())
+  name             String?
+  email            String             @unique
+  password         String?
+  cpf              String?            @unique
+  birthDate        DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  role             Role               @default(USER)
+  deleted          Boolean            @default(false)
+  favoriteImmobile FavoriteImmobile[]
 
   owner  Immobile[] @relation("owner") // relacionamento de 1:N com Immobile
   tenant Immobile[] @relation("tenant") // relacionamento de 1:N com Immobile
@@ -56,26 +57,27 @@ model ImmobileType {
 }
 
 model Immobile {
-  id           String   @id @default(uuid())
-  ownerId      String
-  tenantId     String?
-  addressId    String   @unique
-  typeId       String
-  price        Decimal  @db.Decimal(6, 2)
-  bedroomsQty  Int      @default(1)
-  bathroomsQty Int      @default(1)
-  parkingQty   Int      @default(0)
-  sqrFootage   Decimal  @db.Decimal(7, 2) // ex: 10000,20
-  petFriendly  Boolean  @default(false)
-  description  String   @db.VarChar(250) // validar se é tamanho suficiente para uma descrição
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id               String             @id @default(uuid())
+  ownerId          String
+  tenantId         String?
+  addressId        String             @unique
+  typeId           String
+  price            Decimal            @db.Decimal(6, 2)
+  bedroomsQty      Int                @default(1)
+  bathroomsQty     Int                @default(1)
+  parkingQty       Int                @default(0)
+  sqrFootage       Decimal            @db.Decimal(7, 2) // ex: 10000,20
+  petFriendly      Boolean            @default(false)
+  description      String             @db.VarChar(250) // validar se é tamanho suficiente para uma descrição
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  favoriteImmobile FavoriteImmobile[]
 
   owner   User            @relation("owner", fields: [ownerId], references: [id])
   tenant  User?           @relation("tenant", fields: [tenantId], references: [id])
   address Address         @relation(fields: [addressId], references: [id])
   type    ImmobileType    @relation(fields: [typeId], references: [id])
-  photos  ImmobilePhoto[] 
+  photos  ImmobilePhoto[]
 
   @@map("immobiles")
 }
@@ -97,6 +99,17 @@ model ImmobilePhoto {
 
   @@id([immobileId, photoId])
   @@map("immobile_photos")
+}
+
+model FavoriteImmobile {
+  userId     String
+  immobileId String
+
+  user     User     @relation(fields: [userId], references: [id])
+  immobile Immobile @relation(fields: [immobileId], references: [id])
+
+  @@id([userId, immobileId])
+  @@map("favorite_immobiles")
 }
 
 enum Role {

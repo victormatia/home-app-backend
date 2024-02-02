@@ -13,6 +13,7 @@ class UserController {
   public create = async (req: Request, res: Response, next: NextFunction) => {
     const data: CreateUserDTO = req.body;
     try {
+      console.log('SIGN-UP');
       const user = await this._service.create(data);
       return res.status(201).json(user);
     } catch(err) {
@@ -22,6 +23,7 @@ class UserController {
 
   public login = async (req: Request, res: Response, next: NextFunction) => {
     const { email } = req.body;
+    console.log('SIGN-IN');
     try {
       const token = await this._service.login(email);
       return res.status(200).json({token});

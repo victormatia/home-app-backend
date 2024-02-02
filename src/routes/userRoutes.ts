@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { config } from 'dotenv';
 import { Router } from 'express';
-import { authMiddleware } from '../auth/Auth';
+import { managementClient } from '../auth/Auth';
 import UserController from '../controllers/UserController';
 import UserRepository from '../repository/UserRepository';
 import UserService from '../services/UserService';
@@ -14,7 +14,7 @@ export const prisma = new PrismaClient();
 
 
 const repository = new UserRepository(prisma);
-const service = new UserService(repository);
+const service = new UserService(repository, managementClient);
 const controller = new UserController(service);
 
 
@@ -26,8 +26,8 @@ route.put('/update/:id', controller.update);
 route.delete('/delete/:id', controller.delete);
 route.delete('/purge/:id', controller.purge);
 route.put('/activate/:id', controller.activate);
-route.get('/teste', authMiddleware, (_, res) => {
-  return res.json({message: 'Rota protegida'});
-});
+// route.get('/teste', authMiddleware, (_, res) => {
+//   return res.json({message: 'Rota protegida'});
+// });
 
 export default route;

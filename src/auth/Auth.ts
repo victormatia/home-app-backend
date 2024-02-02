@@ -1,3 +1,4 @@
+import { ManagementClient } from 'auth0';
 import { config } from 'dotenv';
 import { auth } from 'express-oauth2-jwt-bearer';
 config();
@@ -33,3 +34,8 @@ export const authMiddleware = auth({
 //     return false;
 //   }
 // }
+export const managementClient = new ManagementClient({
+  domain: 'dev-xxqg1s11rae0x4rz.us.auth0.com',
+  clientId: '9c5ruxxi9CEcIoaVk5Js02oJ6Q7rqHPP',
+  clientSecret: 'asRMXlKS_xnwU23F7HjNV0SdW42pPcVdCk6rKKMkS3r_sAJIn9eANngdTRUyEcg4',
+});

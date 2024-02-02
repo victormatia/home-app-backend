@@ -3,6 +3,6 @@ import { ApiError } from './ApiError';
 
 export class UserNotRegisteredError extends ApiError{
   constructor() {
-    super(UserErrors.USER_NOT_REGISTERED, 404);
+    super(UserErrors.USER_NOT_REGISTERED, 400);
   }
 } 

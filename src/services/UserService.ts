@@ -1,4 +1,5 @@
 import { User } from '@prisma/client';
+import { ManagementClient } from 'auth0';
 import Jwt from '../auth/Jwt';
 import { UserNotFoundError } from '../error/UserNotFoundError';
 import { UserNotRegisteredError } from '../error/UserNotRegisteredError';
@@ -9,18 +10,27 @@ import UserRepository from '../repository/UserRepository';
 class UserService {
 
 
-  constructor(private _repository: UserRepository) {
+  constructor(private _repository: UserRepository, private _managementClient: ManagementClient) {
   }
 
   public async create(data: CreateUserDTO): Promise<IService<string>> {
     try {
-      await this._repository.create(data);
+      const { auth_id, ...userData } = data;
+      console.log(auth_id);
+      const user = await this._repository.create(userData);
+      
+      const role = {roles: ['rol_lRwn8hIuXTG33tDq']};
+      const params = { id: auth_id };
+      await this._managementClient.users.assignRoles(params, role);
+      await this._managementClient.users.update(params, {user_metadata: {id: user.id}});
 
       const token = Jwt.createToken({ ...data });
+      // this._managementClient.;
 
       return { result: token };
 
     } catch (err) {
+      console.log(err);
       throw new UserNotRegisteredError();
     }
   }

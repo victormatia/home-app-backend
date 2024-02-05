@@ -221,6 +221,18 @@ async function main() {
       },
     ],
   });
+  
+  const favoriteImmobile = await prisma.favoriteImmobile.createMany({
+    data: [{
+      userId: 'google-oauth2|10015361573371827215',
+      immobileId: '000',
+    },
+    {
+      userId: 'google-oauth2|10015361573371827215',
+      immobileId: '001',
+    },
+    ],
+  });
 
   console.table({
     users,
@@ -229,6 +241,7 @@ async function main() {
     immobiles,
     photos,
     immobilePhotos,
+    favoriteImmobile,
   });
 }
 main()

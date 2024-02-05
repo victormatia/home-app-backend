@@ -32,6 +32,7 @@ export interface Immobile {
     sqrFootage: Prisma.Decimal;
     petFriendly: boolean;
     description: string;
+    favoriteImmobile: string[];
     createdAt: Date;
     updatedAt: Date;
     address: Address;

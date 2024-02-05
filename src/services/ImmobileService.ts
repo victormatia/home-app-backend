@@ -1,4 +1,4 @@
-import { Immobile, Prisma, PrismaClient } from '@prisma/client';
+import { FavoriteImmobile, Immobile, Prisma, PrismaClient } from '@prisma/client';
 import IService from '../interfaces/IService';
 
 class ImmobileService {
@@ -108,6 +108,42 @@ class ImmobileService {
       });
   
       return { result: updatedImmobile };
+  
+    } catch (e) {
+      console.error(e);
+      return { message: 'Something went wrong' };
+    }
+  }
+
+  public async favoriteImmobile(immobileId: string, userId: string): Promise<IService<FavoriteImmobile>> {
+    try {
+      const existingFavorite = await this._model.favoriteImmobile.
+        findUnique({where: { userId_immobileId: { userId: userId, immobileId: immobileId } }});
+      if (existingFavorite) {
+        return { message: 'This immobile is already favorited by the user' };
+      }
+      const favorite = await this._model.favoriteImmobile.
+        create({data: { immobileId: immobileId, userId: userId }});
+      return { result: favorite };
+    } catch (e) {
+      console.error(e);
+      return { message: 'Something went wrong' };
+    }
+  }
+
+  public async unfavoriteImmobile(immobileId: string, userId: string): Promise<IService<FavoriteImmobile>> {
+    try {
+      const existingFavorite = await this._model.favoriteImmobile.
+        findUnique({where: { userId_immobileId: { userId: userId, immobileId: immobileId }}});
+  
+      if (!existingFavorite) {
+        return { message: 'This immobile is not favorited by the user' };
+      }
+  
+      const favorite = await this._model.favoriteImmobile.
+        delete({where: { userId_immobileId: { userId: userId, immobileId: immobileId }}});
+  
+      return { result: favorite };
   
     } catch (e) {
       console.error(e);

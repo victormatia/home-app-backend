@@ -48,16 +48,16 @@ class ImmobileController {
   };
 
   public favoriteImmobile: RequestHandler = async (_req, res) => {
-    const { id, userId } = _req.body; 
-    const  { message, result } = await this._service.favoriteImmobile(id, userId); 
+    const { immobileId, userId } = _req.body; 
+    const  { message, result } = await this._service.favoriteImmobile(immobileId, userId); 
 
     return message ? res.status(400).json({ message }) 
       : res.status(200).json(result);
   };
 
   public unfavoriteImmobile: RequestHandler = async (_req, res) => {
-    const { id, userId } = _req.body; 
-    const  { message, result } = await this._service.unfavoriteImmobile(id, userId); 
+    const { immobileId, userId } = _req.body; 
+    const  { message, result } = await this._service.unfavoriteImmobile(immobileId, userId); 
 
     return message ? res.status(400).json({ message }) 
       : res.status(200).json(result);

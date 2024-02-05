@@ -115,15 +115,15 @@ class ImmobileService {
     }
   }
 
-  public async favoriteImmobile(id: string, userId: string): Promise<IService<FavoriteImmobile>> {
+  public async favoriteImmobile(immobileId: string, userId: string): Promise<IService<FavoriteImmobile>> {
     try {
       const existingFavorite = await this._model.favoriteImmobile.
-        findUnique({where: { userId_immobileId: { userId: userId, immobileId: id } }});
+        findUnique({where: { userId_immobileId: { userId: userId, immobileId: immobileId } }});
       if (existingFavorite) {
         return { message: 'This immobile is already favorited by the user' };
       }
       const favorite = await this._model.favoriteImmobile.
-        create({data: { immobileId: id, userId: userId }});
+        create({data: { immobileId: immobileId, userId: userId }});
       return { result: favorite };
     } catch (e) {
       console.error(e);
@@ -131,17 +131,17 @@ class ImmobileService {
     }
   }
 
-  public async unfavoriteImmobile(id: string, userId: string): Promise<IService<FavoriteImmobile>> {
+  public async unfavoriteImmobile(immobileId: string, userId: string): Promise<IService<FavoriteImmobile>> {
     try {
       const existingFavorite = await this._model.favoriteImmobile.
-        findUnique({where: { userId_immobileId: { userId: userId, immobileId: id }}});
+        findUnique({where: { userId_immobileId: { userId: userId, immobileId: immobileId }}});
   
       if (!existingFavorite) {
         return { message: 'This immobile is not favorited by the user' };
       }
   
       const favorite = await this._model.favoriteImmobile.
-        delete({where: { userId_immobileId: { userId: userId, immobileId: id }}});
+        delete({where: { userId_immobileId: { userId: userId, immobileId: immobileId }}});
   
       return { result: favorite };
   

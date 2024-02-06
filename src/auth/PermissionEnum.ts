@@ -1,5 +1,5 @@
 export enum PermissionEnum {
   ADMIN = 'crud:all',
-  USER = 'crud:self',
+  USER = 'crud:user',
   IMMOBILE = 'crud:immobile'
 }

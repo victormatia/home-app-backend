@@ -21,9 +21,9 @@ export const managementClient = new ManagementClient({
 export const checkRequiredPermissions = (permissions: PermissionEnum[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const permissionCheck = claimCheck((payload) => {
-      const calimPermissions = payload.permissions as PermissionEnum[];
-      const permission = calimPermissions[0];
-      if(permissions.includes(permission)) {
+      const claimPermissions = payload.permissions as PermissionEnum[];
+      const permission = claimPermissions.find((permissionValue) => permissions.includes(permissionValue));
+      if(permission) {
         const tokenUserId = payload.userId as string;
         const userId = req.params.id;
         const permissionContainer = new PermissionContainer(userId, tokenUserId);

@@ -52,6 +52,15 @@ class ImmobileService {
   
     return updatedImmobile;
   }
+
+  public checkOwnership(immobileId: string, ownerId: string) {
+    try {
+      this._repository.findByIdAndOwnerId(immobileId, ownerId);
+      return true;
+    } catch(err) {
+      return false;
+    }
+  }
 }
 
 export default ImmobileService;

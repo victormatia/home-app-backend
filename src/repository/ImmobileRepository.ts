@@ -58,6 +58,10 @@ class ImmobileRepository {
     return immobile;
   }
 
+  async findByIdAndOwnerId(id: string, ownerId: string) {
+    return this._model.immobile.findFirstOrThrow({where: {id, ownerId: ownerId} });
+  }
+
 }
 
 export default ImmobileRepository;

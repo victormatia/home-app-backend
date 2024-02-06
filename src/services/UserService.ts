@@ -1,55 +1,98 @@
-import { User, PrismaClient } from '@prisma/client';
-import IService from '../interfaces/IService';
+import { User } from '@prisma/client';
+import { ManagementClient } from 'auth0';
 import Jwt from '../auth/Jwt';
+import { UserNotFoundError } from '../error/UserNotFoundError';
+import { UserNotRegisteredError } from '../error/UserNotRegisteredError';
+import IService from '../interfaces/IService';
+import { CreateUserDTO, UniqueUserDTO, UpdateUserDTO } from '../interfaces/UserDto';
+import UserRepository from '../repository/UserRepository';
 
 class UserService {
-  private _model: PrismaClient;
 
-  constructor(model: PrismaClient) {
-    this._model = model;
+
+  constructor(private _repository: UserRepository, private _managementClient: ManagementClient) {
   }
 
-  public async create(infos: User): Promise<IService<string>> {
+  public async create(data: CreateUserDTO): Promise<IService<string>> {
     try {
-      await this._model.user.create({data: infos});
+      const { auth_id, ...userData } = data;
+      console.log(auth_id);
+      const user = await this._repository.create(userData);
+      
+      const role = {roles: ['rol_lRwn8hIuXTG33tDq']};
+      const params = { id: auth_id };
+      await this._managementClient.users.assignRoles(params, role);
+      await this._managementClient.users.update(params, {user_metadata: {id: user.id}});
 
-      const token = Jwt.createToken({...infos});
+      const token = Jwt.createToken({ ...data });
+      // this._managementClient.;
 
       return { result: token };
 
-    } catch (e) {
-      console.error(e);
-      return { message: 'Something went wrong, user was not registered' };
+    } catch (err) {
+      console.log(err);
+      throw new UserNotRegisteredError();
     }
   }
 
-  public async getAll(): Promise<IService<User[]>> { // renomear esse método para getAll?
+  public async login(userEmail: string): Promise<IService<string>> {
     try {
-      const users = await this._model.user.findMany();
+      const user = await this._repository.findByEmail(userEmail);
 
-      return { result: users };
-
-    } catch (e) {
-      console.error(e);
-      return { message: 'Something went wrong' };
-    }
-  }
-
-  public async login(userId: string): Promise<IService<string>> {
-    try {
-      const user = await this._model.user.findUnique({ where: { id: userId } });
-
-      if(!user) {
-        return { message: 'User not found' };
+      if (!user) {
+        throw new UserNotFoundError();
       }
 
       const token = Jwt.createToken(user);
 
       return { result: token };
 
-    } catch (e) {
-      console.error(e);
-      return { message: 'Something went wrong, user not found' };
+    } catch (err) {
+      throw new UserNotFoundError();
+    }
+  }
+
+  public async getAll(): Promise<User[]> {
+    return this._repository.getAll();
+  }
+
+  public async findById(id: string): Promise<UniqueUserDTO> {
+    const user = await this._repository.findById(id, true);
+    if(!user) {
+      throw new UserNotFoundError();
+    }
+    return user;
+  }
+
+  public async update(id: string, data: UpdateUserDTO): Promise<User> {
+    try {
+      return this._repository.update(id, data);
+    } catch(err) {
+      throw new UserNotFoundError();
+    }
+  }
+
+  public async delete(id: string): Promise<void> {
+    try {
+      await this._repository.delete(id);
+    } catch(err) {
+      throw new UserNotFoundError();
+    }
+  }
+
+  public async purge(id: string): Promise<void> {
+    try {
+      await this._repository.purge(id);
+    } catch(err) {
+      throw new UserNotFoundError();
+    }
+  }
+
+  public async activate(id: string): Promise<void> {
+    try {
+      await this._repository.activate(id);
+    } catch(err) {
+      throw new UserNotFoundError();
     }
   }
 }

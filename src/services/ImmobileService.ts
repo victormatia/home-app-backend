@@ -1,49 +1,64 @@
-import { Immobile, Prisma, PrismaClient } from '@prisma/client';
-import IService from '../interfaces/IService';
+import { Immobile } from '@prisma/client';
+import { ImmobileIncompleteInfoError } from '../error/ImmobileIncompleteInfoError';
+import { ImmobileNotFoundError } from '../error/ImmobileNotFoundError';
+import { CreateImmobileDTO, UpdateImmobileDTO } from '../interfaces/ImmobileDto';
+import ImmobileRepository from '../repository/ImmobileRepository';
 
 class ImmobileService {
-  private _model: PrismaClient;
+  
 
-  constructor(model: PrismaClient) {
-    this._model = model;
+  constructor(private _repository: ImmobileRepository) {
   }
 
-  public async create(immobileInfo: Immobile): Promise<IService<Immobile>> {
+  public async create(immobileInfo: CreateImmobileDTO): Promise<Immobile> {
+    const registeredImmobile = await this._repository.create(immobileInfo);
+    return registeredImmobile;
+  }
+
+  public async getAll(): Promise<Immobile[]> {
+
+    const allImmobiles = await this._repository.getAll();
+    return allImmobiles;
+  }
+
+  public async getImmobileById(id: string): Promise<Immobile>
+  {
+
+    const immobile = await this._repository.findById(id);
+    if(!immobile) {
+      throw new ImmobileNotFoundError();
+    }
+    return immobile;
+
+  }
+
+  public async deleteImmobileById(id: string): Promise<Immobile> {
     try {
-      const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
-
-      const data: Prisma.ImmobileCreateInput = {
-        ...otherInfos,
-        address: { connect: { id: addressId } },
-        owner: { connect: { id: ownerId } },
-        type: { connect: { id: typeId } },
-      };
-
-      const registeredImmobile = await this._model.immobile.create({ data });
-
-      return { result: registeredImmobile };
-
-    } catch (e) {
-      console.error(e);
-      return { message: 'Something went wrong, new immobile was not registered' };
+      const immobile = await this._repository.delete(id);
+      return immobile;
+    } catch (err) {
+      throw new ImmobileNotFoundError();
     }
   }
 
-  public async getAll(): Promise<IService<Immobile[]>> {
+  public async updateImmobileById(id: string, immobileInfo: UpdateImmobileDTO): Promise<Immobile> {
+    const { ownerId, addressId, typeId } = immobileInfo;
+  
+    if (ownerId === undefined || addressId === undefined || typeId === undefined) {
+      throw new ImmobileIncompleteInfoError();
+    }
+  
+    const updatedImmobile = this._repository.update(id, immobileInfo);
+  
+    return updatedImmobile;
+  }
+
+  public checkOwnership(immobileId: string, ownerId: string) {
     try {
-      const allImmobiles = await this._model.immobile.findMany({
-        include: {
-          address: true,
-          type: true,
-          photos: {select: {photo: { select: { url: true } }}},
-        },
-      });
-
-      return { result: allImmobiles };
-
-    } catch (e) {
-      console.error(e);
-      return { message: 'Something went wrong' };
+      this._repository.findByIdAndOwnerId(immobileId, ownerId);
+      return true;
+    } catch(err) {
+      return false;
     }
   }
 }

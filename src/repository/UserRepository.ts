@@ -10,7 +10,7 @@ class UserRepository {
     this._model = prismaCliente;
   }
 
-  async create(data: Omit<CreateUserDTO, 'auth_id'>): Promise<User> {
+  async create(data: CreateUserDTO): Promise<User> {
     return await this._model.user.create({ data });
   }
 

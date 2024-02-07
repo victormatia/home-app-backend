@@ -7,7 +7,6 @@ export interface CreateUserDTO {
   password: string | null;
   cpf: string;
   birthDate: Date | null;
-  auth_id: string; 
 }
 
 export interface getUserDto {

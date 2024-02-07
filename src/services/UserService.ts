@@ -15,14 +15,8 @@ class UserService {
 
   public async create(data: CreateUserDTO): Promise<IService<string>> {
     try {
-      const { auth_id, ...userData } = data;
-      console.log(auth_id);
-      await this._repository.create(userData);
-      
-      // const role = {roles: ['rol_lRwn8hIuXTG33tDq']};
-      // const params = { id: auth_id };
-      // await this._managementClient.users.assignRoles(params, role);
-      // await this._managementClient.users.update(params, {user_metadata: {id: user.id}});
+      // await this._repository.create(userData);
+      console.log(data);
 
       const token = Jwt.createToken({ ...data });
 

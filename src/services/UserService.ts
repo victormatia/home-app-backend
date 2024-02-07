@@ -15,8 +15,7 @@ class UserService {
 
   public async create(data: CreateUserDTO): Promise<IService<string>> {
     try {
-      // await this._repository.create(userData);
-      console.log(data);
+      await this._repository.create(data);
 
       const token = Jwt.createToken({ ...data });
 

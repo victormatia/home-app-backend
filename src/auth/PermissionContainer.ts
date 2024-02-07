@@ -11,7 +11,7 @@ export class PermissionContainer {
   constructor(userId: string, tokenUserId: string) {
     this.addPermissionValidator(PermissionEnum.ADMIN, new AdminPermissionValidator(userId, tokenUserId));
     this.addPermissionValidator(PermissionEnum.USER, new UserPermissionValidator(userId, tokenUserId));
-    this.addPermissionValidator(PermissionEnum.ADMIN, new ImmobilePermissionValidator(userId, tokenUserId)); 
+    this.addPermissionValidator(PermissionEnum.IMMOBILE, new ImmobilePermissionValidator(userId, tokenUserId)); 
   }
 
   private addPermissionValidator(permission: PermissionEnum, validator: PermissionValidator) {

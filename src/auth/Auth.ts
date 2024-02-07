@@ -25,8 +25,8 @@ export const checkRequiredPermissions = (permissions: PermissionEnum[]) => {
       const permission = claimPermissions.find((permissionValue) => permissions.includes(permissionValue));
       if(permission) {
         const tokenUserId = payload.userId as string;
-        const userId = req.params.id;
-        const permissionContainer = new PermissionContainer(userId, tokenUserId);
+        const id = req.params.id;
+        const permissionContainer = new PermissionContainer(id, tokenUserId);
         return permissionContainer.useValidator(permission);
       }
       

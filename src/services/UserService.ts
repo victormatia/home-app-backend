@@ -17,15 +17,14 @@ class UserService {
     try {
       const { auth_id, ...userData } = data;
       console.log(auth_id);
-      const user = await this._repository.create(userData);
+      await this._repository.create(userData);
       
-      const role = {roles: ['rol_lRwn8hIuXTG33tDq']};
-      const params = { id: auth_id };
-      await this._managementClient.users.assignRoles(params, role);
-      await this._managementClient.users.update(params, {user_metadata: {id: user.id}});
+      // const role = {roles: ['rol_lRwn8hIuXTG33tDq']};
+      // const params = { id: auth_id };
+      // await this._managementClient.users.assignRoles(params, role);
+      // await this._managementClient.users.update(params, {user_metadata: {id: user.id}});
 
       const token = Jwt.createToken({ ...data });
-      // this._managementClient.;
 
       return { result: token };
 

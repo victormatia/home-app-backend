@@ -6,6 +6,7 @@ export enum GenericErrors {
 export enum UserErrors {
   USER_NOT_FOUND = 'User not found',
   USER_NOT_REGISTERED = 'Something went wrong, user was not registered',
+  TOKEN_MALFORMED = 'Token may not contain correct payload'
 }
 
 export enum ImmobileErrors {
@@ -24,5 +25,6 @@ export enum UserSuccess {
 export enum AuthorizationErrors {
   TOKEN_NOT_FOUND = 'Token not found',
   INVALID_TOKEN = 'Invalid token',
-  ACCESS_FORBIDEN = 'Access not alowed'
+  ACCESS_FORBIDEN = 'Access not alowed',
+  UNAUTHORIZED_ERROR = 'Access unauthorized'
 }

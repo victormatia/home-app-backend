@@ -2,6 +2,7 @@ import { ManagementClient } from 'auth0';
 import { config } from 'dotenv';
 import { NextFunction, Request, Response } from 'express';
 import { auth, claimCheck } from 'express-oauth2-jwt-bearer';
+import { AccessForbidden } from '../error/AccessForbidden';
 import { PermissionContainer } from './PermissionContainer';
 import { PermissionEnum } from './PermissionEnum';
 config();
@@ -32,7 +33,10 @@ export const checkRequiredPermissions = (permissions: PermissionEnum[]) => {
       
       return false;
     });
-
-    permissionCheck(req, res, next);
+    try{
+      permissionCheck(req, res, next);
+    } catch(err) {
+      throw new AccessForbidden();
+    }
   };
 };

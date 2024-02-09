@@ -34,7 +34,7 @@ class UserRepository {
             },
           },
           tenant: includeImmobiles,
-          favoriteImmobile: { select: { immobileId: true }}, 
+          favoriteImmobile: {include: {immobile: {include: {photos: { select: { photo: { select: { url: true } } } }, address: true, type: true}}}},
         },
       }) as Promise<UniqueUserDTO | null>;
   }

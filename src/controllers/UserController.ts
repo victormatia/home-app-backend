@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 import { Request, Response } from 'express';
-import { CreateUserDTO } from '../interfaces/UserDto';
+import { ChangePasswordDTO, CreateUserDTO } from '../interfaces/UserDto';
 import UserService from '../services/UserService';
 
 class UserController {
@@ -86,6 +86,15 @@ class UserController {
     }
   };
 
+  public cheangePassword = async(req: Request, res: Response) => {
+    try {
+      const data = req.body as ChangePasswordDTO;
+      this._service.changePassword(data);
+      return res.status(200).json('Password changed successfully');
+    } catch(e) {
+      return res.status(400).json('Something went wrong.');
+    }
+  };
 }
 
 export default UserController;

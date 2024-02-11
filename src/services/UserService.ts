@@ -1,13 +1,14 @@
 import { User } from '@prisma/client';
+import { ManagementClient } from 'auth0';
 import Jwt from '../auth/Jwt';
 import IService from '../interfaces/IService';
-import { CreateUserDTO, UniqueUserDTO } from '../interfaces/UserDto';
+import { ChangePasswordDTO, CreateUserDTO, UniqueUserDTO } from '../interfaces/UserDto';
 import UserRepository from '../repository/UserRepository';
 
 class UserService {
+  
 
-
-  constructor(private _repository: UserRepository) {
+  constructor(private _repository: UserRepository, private _manager: ManagementClient) {
   }
 
   public async create(data: CreateUserDTO): Promise<IService<{token: string, userId: string}>> {
@@ -71,6 +72,14 @@ class UserService {
 
   public async activate(id: string): Promise<void> {
     await this._repository.activate(id);
+  }
+
+  public async changePassword(data: ChangePasswordDTO): Promise<void> {
+    const {id, authId, password} = data;
+    const params = {id: authId};
+    const updateData = {password};
+    await this._manager.users.update(params, updateData);
+    await this._repository.update(id, {password});
   }
 }
 

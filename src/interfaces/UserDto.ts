@@ -13,3 +13,9 @@ export interface UniqueUserDTO extends User {
   owner: Immobile[],
   tenant: Immobile[] 
 }
+
+export interface ChangePasswordDTO {
+  id: string;
+  authId: string;
+  password: string
+}

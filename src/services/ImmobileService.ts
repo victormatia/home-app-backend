@@ -1,5 +1,6 @@
 import { FavoriteImmobile, Immobile, Prisma, PrismaClient } from '@prisma/client';
 import IService from '../interfaces/IService';
+import { Address } from '../interfaces/IImmobile'; // Import the Address type
 
 class ImmobileService {
   private _model: PrismaClient;
@@ -10,24 +11,40 @@ class ImmobileService {
 
   public async create(immobileInfo: Immobile): Promise<IService<Immobile>> {
     try {
-      const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
-
+      const { ownerId, address, typeId, ...otherInfos } = immobileInfo as Immobile & { address: Address };
       const data: Prisma.ImmobileCreateInput = {
         ...otherInfos,
-        address: { connect: { id: addressId } },
+        address: { create: [{ ...address }] },
         owner: { connect: { id: ownerId } },
         type: { connect: { id: typeId } },
       };
+      const registeredImmobile = await this._model.immobile.create({
+        data: {
+          ...otherInfos,
+          address: {
+            create: [
+              { ...address, number: address.number.toString() }], 
+          },
+          owner: { connect: { id: ownerId } },
+          type: { connect: { id: typeId } },
+        },
+      });
 
-      const registeredImmobile = await this._model.immobile.create({ data });
+      // await this._model.$transaction([
+      //   this._model.address.create({
+      //     data: {..address}
+      //   }),
 
+      // ]);
+  
       return { result: registeredImmobile };
-
+  
     } catch (e) {
       console.error(e);
       return { message: 'Something went wrong, new immobile was not registered' };
     }
   }
+  
 
   public async getAll(): Promise<IService<Immobile[]>> {
     try {

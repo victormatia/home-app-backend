@@ -1,15 +1,15 @@
 import { Prisma } from '@prisma/client';
 
 export interface Address {
-    id: string;
-    street: string;
-    burgh: string;
-    city: string;
-    state: string;
-    postalCode: string;
-    number: number;
-    apto: number;
-    complement: string;
+      id: string;
+      street: string;
+      burgh: string;
+      city: string;
+      state: string;
+      postalCode: string;
+      number: number;
+      apto: number;
+      complement: string;
     createdAt: Date;
     updatedAt: Date;
   }

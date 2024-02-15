@@ -1,6 +1,5 @@
 import { FavoriteImmobile, Immobile, Prisma, PrismaClient } from '@prisma/client';
 import IService from '../interfaces/IService';
-import { Address } from '../interfaces/IImmobile'; // Import the Address type
 
 class ImmobileService {
   private _model: PrismaClient;
@@ -11,33 +10,35 @@ class ImmobileService {
 
   public async create(immobileInfo: Immobile): Promise<IService<Immobile>> {
     try {
-      const { ownerId, address, typeId, ...otherInfos } = immobileInfo as Immobile & { address: Address };
-      const data: Prisma.ImmobileCreateInput = {
+      const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
+  
+      const immobileData: Prisma.ImmobileCreateInput = {
         ...otherInfos,
-        address: { create: [{ ...address }] },
+        address: { connect: { id: addressId } },
         owner: { connect: { id: ownerId } },
         type: { connect: { id: typeId } },
       };
-      const registeredImmobile = await this._model.immobile.create({
-        data: {
-          ...otherInfos,
-          address: {
-            create: [
-              { ...address, number: address.number.toString() }], 
-          },
-          owner: { connect: { id: ownerId } },
-          type: { connect: { id: typeId } },
-        },
-      });
-
-      // await this._model.$transaction([
-      //   this._model.address.create({
-      //     data: {..address}
-      //   }),
-
-      // ]);
   
-      return { result: registeredImmobile };
+      const addressData: Prisma.AddressCreateWithoutImmobileInput = {
+        id: '' as string,
+        street: '',
+        burgh: '',
+        city: '',
+        state: '',
+        postalCode: '',
+        number: '',
+        apto: null,
+        complement: null,
+        createdAt: undefined,
+        updatedAt: undefined,
+      };
+
+      await this._model.$transaction([
+        this._model.immobile.create({ data: immobileData }),
+        this._model.address.create({ data: addressData }),
+      ]);
+  
+      return { message: 'Successfully created immobile and additional entries' };
   
     } catch (e) {
       console.error(e);

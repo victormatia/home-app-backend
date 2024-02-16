@@ -1,5 +1,6 @@
-import { FavoriteImmobile, Immobile, Prisma, PrismaClient } from '@prisma/client';
+import { FavoriteImmobile, Prisma, PrismaClient, Immobile } from '@prisma/client';
 import IService from '../interfaces/IService';
+import { CreateImmobile } from '../interfaces/IImmobile';
 
 class ImmobileService {
   private _model: PrismaClient;
@@ -8,38 +9,20 @@ class ImmobileService {
     this._model = model;
   }
 
-  public async create(immobileInfo: Immobile): Promise<IService<Immobile>> {
+  public async create(immobileInfo: CreateImmobile): Promise<IService<Immobile>> {
     try {
-      const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
+      const { ownerId, address, typeId, ...otherInfos } = immobileInfo;
   
       const immobileData: Prisma.ImmobileCreateInput = {
         ...otherInfos,
-        address: { connect: { id: addressId } },
+        address: { create: { ...address } },
         owner: { connect: { id: ownerId } },
         type: { connect: { id: typeId } },
       };
   
-      const addressData: Prisma.AddressCreateWithoutImmobileInput = {
-        id: '' as string,
-        street: '',
-        burgh: '',
-        city: '',
-        state: '',
-        postalCode: '',
-        number: '',
-        apto: null,
-        complement: null,
-        createdAt: undefined,
-        updatedAt: undefined,
-      };
 
-      await this._model.$transaction([
-        this._model.immobile.create({ data: immobileData }),
-        this._model.address.create({ data: addressData }),
-      ]);
-  
-      return { message: 'Successfully created immobile and additional entries' };
-  
+      const registeredImmobile = await this._model.immobile.create({ data: immobileData });
+      return { result: registeredImmobile as unknown as Immobile };
     } catch (e) {
       console.error(e);
       return { message: 'Something went wrong, new immobile was not registered' };

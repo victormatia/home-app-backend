@@ -85,22 +85,28 @@ class ImmobileService {
     }
   }
 
-  public async updateImmobileById(id: string, immobileInfo: Immobile): Promise<IService<Immobile>> {
+  public async updateImmobileById(id: string, immobileInfo: CreateImmobile ): Promise<IService<Immobile>> {
     try {
-      const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
+      const { ownerId, address, typeId, ...otherInfos } = immobileInfo;
   
-      if (ownerId === undefined || addressId === undefined || typeId === undefined) {
-        return { message: 'ownerId, addressId, and typeId must be provided' };
+      if (ownerId === undefined || address === undefined || typeId === undefined) {
+        return { message: 'ownerId, address, and typeId must be provided' };
       }
   
-      const address = await this._model.address.findUnique({ where: { id: addressId } });
-      if (!address) {
-        return { message: 'Address with the given id does not exist' };
+      const existingImmobile = await this._model.immobile.findUnique({ where: { id: id }, include: { address: true } });
+      if (!existingImmobile) {
+        return { message: 'Immobile with the given id does not exist' };
+      }
+  
+      if (!existingImmobile.address || existingImmobile.address.id !== address.id) {
+        return { message: 'Address with the given id does not exist or is not connected to the Immobile' };
       }
   
       const data: Prisma.ImmobileUpdateInput = {
         ...otherInfos,
         owner: { connect: { id: ownerId } },
+        type: { connect: { id: typeId } },
+        address: { update: { ...address }},
       };
   
       const updatedImmobile = await this._model.immobile.update({

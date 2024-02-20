@@ -63,6 +63,13 @@ class ImmobileController {
       : res.status(200).json(result);
   };
 
+
+  public getAllTypes: RequestHandler = async (_req, res) => {
+    const  { message, result } = await this._service.getAllTypes();
+
+    return message ? res.status(400).json({ message }) 
+      : res.status(200).json(result);
+  };
 }
 
 export default  ImmobileController;

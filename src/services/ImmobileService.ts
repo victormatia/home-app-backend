@@ -1,5 +1,6 @@
-import { FavoriteImmobile, Immobile, Prisma, PrismaClient } from '@prisma/client';
+import { FavoriteImmobile, Prisma, PrismaClient, Immobile } from '@prisma/client';
 import IService from '../interfaces/IService';
+import { CreateImmobile } from '../interfaces/IImmobile';
 
 class ImmobileService {
   private _model: PrismaClient;
@@ -8,26 +9,26 @@ class ImmobileService {
     this._model = model;
   }
 
-  public async create(immobileInfo: Immobile): Promise<IService<Immobile>> {
+  public async create(immobileInfo: CreateImmobile): Promise<IService<Immobile>> {
     try {
-      const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
-
-      const data: Prisma.ImmobileCreateInput = {
+      const { ownerId, address, typeId, ...otherInfos } = immobileInfo;
+  
+      const immobileData: Prisma.ImmobileCreateInput = {
         ...otherInfos,
-        address: { connect: { id: addressId } },
+        address: { create: { ...address } },
         owner: { connect: { id: ownerId } },
         type: { connect: { id: typeId } },
       };
+  
 
-      const registeredImmobile = await this._model.immobile.create({ data });
-
-      return { result: registeredImmobile };
-
+      const registeredImmobile = await this._model.immobile.create({ data: immobileData });
+      return { result: registeredImmobile as unknown as Immobile };
     } catch (e) {
       console.error(e);
       return { message: 'Something went wrong, new immobile was not registered' };
     }
   }
+  
 
   public async getAll(): Promise<IService<Immobile[]>> {
     try {
@@ -84,22 +85,28 @@ class ImmobileService {
     }
   }
 
-  public async updateImmobileById(id: string, immobileInfo: Immobile): Promise<IService<Immobile>> {
+  public async updateImmobileById(id: string, immobileInfo: CreateImmobile ): Promise<IService<Immobile>> {
     try {
-      const { ownerId, addressId, typeId, ...otherInfos } = immobileInfo;
+      const { ownerId, address, typeId, ...otherInfos } = immobileInfo;
   
-      if (ownerId === undefined || addressId === undefined || typeId === undefined) {
-        return { message: 'ownerId, addressId, and typeId must be provided' };
+      if (ownerId === undefined || address === undefined || typeId === undefined) {
+        return { message: 'ownerId, address, and typeId must be provided' };
       }
   
-      const address = await this._model.address.findUnique({ where: { id: addressId } });
-      if (!address) {
-        return { message: 'Address with the given id does not exist' };
+      const existingImmobile = await this._model.immobile.findUnique({ where: { id: id }, include: { address: true } });
+      if (!existingImmobile) {
+        return { message: 'Immobile with the given id does not exist' };
+      }
+  
+      if (!existingImmobile.address || existingImmobile.address.id !== address.id) {
+        return { message: 'Address with the given id does not exist or is not connected to the Immobile' };
       }
   
       const data: Prisma.ImmobileUpdateInput = {
         ...otherInfos,
         owner: { connect: { id: ownerId } },
+        type: { connect: { id: typeId } },
+        address: { update: { ...address }},
       };
   
       const updatedImmobile = await this._model.immobile.update({

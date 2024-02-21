@@ -33,6 +33,7 @@ export interface CreateImmobile {
     petFriendly: boolean;
     description: string;
     favoriteImmobile: any;
+    furnished: boolean;
     createdAt: Date;
     updatedAt: Date;
     address: Address;

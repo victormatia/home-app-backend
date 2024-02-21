@@ -160,10 +160,7 @@ class ImmobileService {
 
   public async getAllTypes(): Promise<IService<Type[]>> {
     try {
-      const allTypes = await this._model.immobileType.findMany({
-        include: {
-         
-        }});
+      const allTypes = await this._model.immobileType.findMany({include: {}});
       return { result: allTypes};
     } catch (e) {
       console.error(e);

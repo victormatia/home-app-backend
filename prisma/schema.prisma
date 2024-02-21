@@ -68,6 +68,7 @@ model Immobile {
   parkingQty       Int                @default(0)
   sqrFootage       Decimal            @db.Decimal(7, 2) // ex: 10000,20
   petFriendly      Boolean            @default(false)
+  furnished        Boolean            @default(false)
   description      String             @db.VarChar(250) // validar se é tamanho suficiente para uma descrição
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt

@@ -1,6 +1,6 @@
 import { FavoriteImmobile, Prisma, PrismaClient, Immobile } from '@prisma/client';
 import IService from '../interfaces/IService';
-import { CreateImmobile } from '../interfaces/IImmobile';
+import { CreateImmobile, Type } from '../interfaces/IImmobile';
 
 class ImmobileService {
   private _model: PrismaClient;
@@ -152,6 +152,19 @@ class ImmobileService {
   
       return { result: favorite };
   
+    } catch (e) {
+      console.error(e);
+      return { message: 'Something went wrong' };
+    }
+  }
+
+  public async getAllTypes(): Promise<IService<Type[]>> {
+    try {
+      const allTypes = await this._model.immobileType.findMany({
+        include: {
+         
+        }});
+      return { result: allTypes};
     } catch (e) {
       console.error(e);
       return { message: 'Something went wrong' };

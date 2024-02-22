@@ -17,6 +17,6 @@ router.delete('/delete::id', TokenMiddleware.validate, controller.deleteImmobile
 router.patch('/update::id', TokenMiddleware.validate, controller.updateImmobileById);
 router.post('/favorite', TokenMiddleware.validate, controller.favoriteImmobile);
 router.delete('/unfavorite', TokenMiddleware.validate, controller.unfavoriteImmobile);
-router.get('/listTypes', TokenMiddleware.validate, controller.getAllTypes);
+router.get('/listTypes', controller.getAllTypes);
 
 export default router;

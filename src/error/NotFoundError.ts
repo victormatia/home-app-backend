@@ -1,7 +1,7 @@
 import { ApiError } from './ApiError';
 
-export class AccessForbidden extends ApiError {
+export class NotFoundError extends ApiError {
   constructor(message: string) {
-    super(message, 403);
+    super(message, 404);
   }
 }

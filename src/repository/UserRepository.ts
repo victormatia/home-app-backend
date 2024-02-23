@@ -29,12 +29,12 @@ class UserRepository {
         include: {
           owner: {
             include: {
-              address: true,            
-              photos: { select: { photo: { select: { url: true } }}}, 
+              address: true,
+              photos: { select: { photo: { select: { url: true } } } },
             },
           },
           tenant: includeImmobiles,
-          favoriteImmobile: {include: {immobile: {include: {photos: { select: { photo: { select: { url: true } } } }, address: true, type: true}}}},
+          favoriteImmobile: {include: { immobile: { include: { photos: { select: { photo: { select: { url: true } } } }, address: true, type: true } } }},
         },
       }) as Promise<UniqueUserDTO | null>;
   }

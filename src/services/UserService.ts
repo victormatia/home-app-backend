@@ -1,47 +1,44 @@
 import { User } from '@prisma/client';
-import { ManagementClient } from 'auth0';
-import Jwt from '../auth/Jwt';
-import { UserNotFoundError } from '../error/UserNotFoundError';
-import { UserNotRegisteredError } from '../error/UserNotRegisteredError';
-import IService from '../interfaces/IService';
+import { InternalServerError } from '../error/InternalServerError';
+import { NotFoundError } from '../error/NotFoundError';
 import { CreateUserDTO, UniqueUserDTO, UpdateUserDTO } from '../interfaces/UserDto';
 import UserRepository from '../repository/UserRepository';
+import { GenericErrors, UserErrors } from '../util/messages';
 
 class UserService {
 
 
-  constructor(private _repository: UserRepository, private _managementClient: ManagementClient) {
+  constructor(private _repository: UserRepository) {
   }
 
-  public async create(data: CreateUserDTO): Promise<IService<string>> {
+  public async create(data: CreateUserDTO): Promise<{userId: string}> {
     try {
-      await this._repository.create(data);
-
-      const token = Jwt.createToken({ ...data });
-
-      return { result: token };
+      const user = await this._repository.create(data);
+      
+      const userId =  user.id;
+      
+      return { userId };
 
     } catch (err) {
       console.log(err);
-      throw new UserNotRegisteredError();
+      throw new InternalServerError(UserErrors.USER_NOT_REGISTERED);
     }
   }
 
-  public async login(userEmail: string): Promise<IService<string>> {
+  public async login(userEmail: string) {
     try {
       const user = await this._repository.findByEmail(userEmail);
-
+  
       if (!user) {
-        throw new UserNotFoundError();
+        throw new NotFoundError(UserErrors.USER_NOT_FOUND);
       }
-
-      const token = Jwt.createToken(user);
-
-      return { result: token };
+  
+      return { userId: user.id };
 
     } catch (err) {
-      throw new UserNotFoundError();
-    }
+      throw new InternalServerError(GenericErrors.SERVER_ERROR);
+
+    } 
   }
 
   public async getAll(): Promise<User[]> {
@@ -51,7 +48,7 @@ class UserService {
   public async findById(id: string): Promise<UniqueUserDTO> {
     const user = await this._repository.findById(id, true);
     if(!user) {
-      throw new UserNotFoundError();
+      throw new NotFoundError(UserErrors.USER_NOT_FOUND);
     }
     return user;
   }
@@ -60,7 +57,7 @@ class UserService {
     try {
       return this._repository.update(id, data);
     } catch(err) {
-      throw new UserNotFoundError();
+      throw new NotFoundError(UserErrors.USER_NOT_FOUND);
     }
   }
 
@@ -68,7 +65,7 @@ class UserService {
     try {
       await this._repository.delete(id);
     } catch(err) {
-      throw new UserNotFoundError();
+      throw new NotFoundError(UserErrors.USER_NOT_FOUND);
     }
   }
 
@@ -76,7 +73,7 @@ class UserService {
     try {
       await this._repository.purge(id);
     } catch(err) {
-      throw new UserNotFoundError();
+      throw new NotFoundError(UserErrors.USER_NOT_FOUND);
     }
   }
 
@@ -84,7 +81,7 @@ class UserService {
     try {
       await this._repository.activate(id);
     } catch(err) {
-      throw new UserNotFoundError();
+      throw new NotFoundError(UserErrors.USER_NOT_FOUND);
     }
   }
 }

@@ -13,7 +13,10 @@ export enum ImmobileErrors {
   IMMOBILE_NOT_CREATED = 'Something went wrong, new immobile was not registered', 
   ADDRESS_NOT_FOUND = 'Address with the given id does not exist',
   UPDATE_INFO_INCOMPLETE = 'ownerId, addressId, and typeId must be provided',
-  IMMOBILE_NOT_FOUND = 'Immobile not found'
+  IMMOBILE_NOT_FOUND = 'Immobile not found',
+  IMMOBILE_IS_ALREADY_FAVORITED = 'This immobile is already favorited by the user',
+  IMMOBILE_IS_NOT_FAVORITED = 'This immobile is not favorited by the user',
+  IMMOBILE_AND_ADRRESS_ARE_NOT_CONNECTED='Address with the given id does not exist or is not connected to the Immobile'
 }
 
 export enum UserSuccess {

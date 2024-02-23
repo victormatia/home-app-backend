@@ -1,80 +1,85 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateImmobileDTO, UpdateImmobileDTO } from '../interfaces/ImmobileDto';
+import { CreateImmobile } from '../interfaces/IImmobile';
 import ImmobileService from '../services/ImmobileService';
 
 class ImmobileController {
   private _service: ImmobileService;
-  
+
   constructor(service: ImmobileService) {
     this._service = service;
   }
 
   public create = async (req: Request, res: Response, next: NextFunction) => {
-    const data: CreateImmobileDTO = req.body;
+    const data: CreateImmobile = req.body;
     try {
-      const result  = await this._service.create(data);
+      const result = await this._service.create(data);
       return res.status(201).json(result);
-    } catch(err) {
+    } catch (err) {
       return next(err);
     }
   };
-  
-  public getAll = async (_req: Request, res: Response, next: NextFunction) => {
+
+  public getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result  = await this._service.getAll();
+      const result = await this._service.getAll();
       return res.status(200).json(result);
-    } catch(err) {
+    } catch (err) {
       return next(err);
     }
-  }; 
+  };
 
-  public getImmobileById = async (_req: Request, res: Response, next: NextFunction) => {
-    const { id } = _req.params;
+  public getImmobileById = async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
     try {
       const result = await this._service.getImmobileById(id);
       return res.status(200).json(result);
-    } catch(err) {
+    } catch (err) {
       return next(err);
     }
-  }; 
+  };
 
-  public deleteImmobileById = async (_req: Request, res: Response, next: NextFunction) => {
-    const { id } = _req.params;
+  public deleteImmobileById = async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
     try {
       const result = await this._service.deleteImmobileById(id);
       return res.status(200).json(result);
-    } catch(err) {
+    } catch (err) {
       return next(err);
     }
   };
-  
-  public updateImmobileById = async (_req: Request, res: Response, next: NextFunction) => {
-    const { id } = _req.params;
+
+  public updateImmobileById = async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
     try {
-      const immobileInfo: UpdateImmobileDTO = _req.body; 
-      const result = await this._service.updateImmobileById(id, immobileInfo); 
+      const immobileInfo: CreateImmobile = req.body;
+      const result = await this._service.updateImmobileById(id, immobileInfo);
       return res.status(200).json(result);
-    } catch(err) {
+    } catch (err) {
       return next(err);
     }
   };
 
-  public favoriteImmobile: RequestHandler = async (_req, res) => {
-    const { immobileId, userId } = _req.body; 
-    const  { message, result } = await this._service.favoriteImmobile(immobileId, userId); 
-
-    return message ? res.status(400).json({ message }) 
-      : res.status(200).json(result);
+  public favoriteImmobile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { immobileId, userId } = req.body;
+      const result = await this._service.favoriteImmobile(immobileId, userId);
+      return res.status(201).json(result);
+    } catch (err) {
+      next(err);
+    }
   };
 
-  public unfavoriteImmobile: RequestHandler = async (_req, res) => {
-    const { immobileId, userId } = _req.body; 
-    const  { message, result } = await this._service.unfavoriteImmobile(immobileId, userId); 
+  public unfavoriteImmobile = async (req: Request, res: Response, next: NextFunction) => {
 
-    return message ? res.status(400).json({ message }) 
-      : res.status(200).json(result);
+    try {
+      const { immobileId, userId } = req.body;
+      const result = await this._service.unfavoriteImmobile(immobileId, userId);
+      return res.status(200).json(result);
+    } catch (err) {
+      return next(err);
+    }
   };
 
 }
 
-export default  ImmobileController;
+export default ImmobileController;

@@ -20,7 +20,6 @@ class UserService {
       return { userId };
 
     } catch (err) {
-      console.log(err);
       throw new InternalServerError(UserErrors.USER_NOT_REGISTERED);
     }
   }

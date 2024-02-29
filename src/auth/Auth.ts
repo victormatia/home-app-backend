@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import { NextFunction, Request, Response } from 'express';
 import { auth, claimCheck } from 'express-oauth2-jwt-bearer';
 import { AccessForbidden } from '../error/AccessForbidden';
+import { AuthorizationErrors } from '../util/messages';
 import { PermissionContainer } from './PermissionContainer';
 import { PermissionEnum } from './PermissionEnum';
 config();
@@ -36,7 +37,7 @@ export const checkRequiredPermissions = (permissions: PermissionEnum[]) => {
     try{
       permissionCheck(req, res, next);
     } catch(err) {
-      throw new AccessForbidden();
+      throw new AccessForbidden(AuthorizationErrors.ACCESS_FORBIDEN);
     }
   };
 };

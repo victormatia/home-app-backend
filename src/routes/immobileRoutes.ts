@@ -16,9 +16,9 @@ const controller = new ImmobileController(service);
 
 router.get('/list', controller.getAll);
 router.post('/create', controller.create);
-router.get('/list/id', controller.getImmobileById);
-router.delete('/delete/id', controller.deleteImmobileById);
-router.patch('/update/id', controller.updateImmobileById);
+router.get('/list/:id', controller.getImmobileById);
+router.delete('/delete/:id', controller.deleteImmobileById);
+router.patch('/update/:id',controller.updateImmobileById);
 router.post('/favorite', controller.favoriteImmobile);
 router.delete('/unfavorite', controller.unfavoriteImmobile);
 

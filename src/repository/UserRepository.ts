@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient, User } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
-import { CreateUserDTO, UniqueUserDTO } from '../interfaces/UserDto';
+import { UniqueUserDTO } from '../interfaces/UserDto';
 
 
 class UserRepository {
@@ -10,7 +10,7 @@ class UserRepository {
     this._model = prismaCliente;
   }
 
-  async create(data: CreateUserDTO): Promise<User> {
+  async create(data: Prisma.UserCreateInput): Promise<User> {
     return await this._model.user.create({ data });
   }
 
@@ -34,12 +34,13 @@ class UserRepository {
             },
           },
           tenant: includeImmobiles,
+          // eslint-disable-next-line max-len
           favoriteImmobile: {include: { immobile: { include: { photos: { select: { photo: { select: { url: true } } } }, address: true, type: true } } }},
         },
       }) as Promise<UniqueUserDTO | null>;
   }
 
-  async update(id: string, data: Partial<User>): Promise<User> {
+  async update(id: string, data: Prisma.UserUpdateInput): Promise<User> {
     return this._model.user.update({ where: { id, deleted: false }, data });
   }
 

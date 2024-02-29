@@ -1,11 +1,11 @@
+import { PrismaClient } from '@prisma/client';
 import { expect } from 'chai';
-import { Request, Response, NextFunction } from 'express'; // Import NextFunction from 'express'
+import { NextFunction, Request, Response } from 'express'; // Import NextFunction from 'express'
 import sinon, { SinonStub } from 'sinon';
 import ImmobileController from '../../controllers/ImmobileController';
+import { Immobile } from '../../interfaces/ImmobileDto';
 import ImmobileService from '../../services/ImmobileService';
 import ImmobileList from './ImmobileList.mock';
-import { PrismaClient } from '@prisma/client';
-import { Immobile } from '../../interfaces/IImmobile';
 
 describe('Test Immobile Controller layer', () => {
   let immobileController: ImmobileController;

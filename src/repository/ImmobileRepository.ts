@@ -1,5 +1,6 @@
 import { Immobile, Prisma, PrismaClient } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
+import { CreateImmobileDTO, UpdateImmobileDTO } from '../interfaces/ImmobileDto';
 
 class ImmobileRepository {
   private _model: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>;
@@ -8,8 +9,17 @@ class ImmobileRepository {
     this._model = prismaCliente;
   }
 
-  async create(data: Prisma.ImmobileCreateInput): Promise<Immobile> {
-    return await this._model.immobile.create({ data });
+  async create(data: CreateImmobileDTO): Promise<Immobile> {
+
+    const {address, ownerId, typeId, photos, ...otherInfos} = data;
+    const immobileData: Prisma.ImmobileCreateInput = {
+      ...otherInfos,
+      address: { create: { ...address } },
+      owner: { connect: { id: ownerId } },
+      type: { connect: { id: typeId } },
+      photos: {createMany: {data: photos}},
+    };
+    return await this._model.immobile.create({ data: immobileData });
   }
 
   async getAll(): Promise<Immobile[]> {
@@ -17,30 +27,37 @@ class ImmobileRepository {
       include: {
         address: true,
         type: true,
-        photos: {select: {photo: { select: { url: true } }}},
+        photos: {select: {url: true}},
       },
     });
     return allImmobiles;
   }
 
-  async findById(id: string) {
+  async findById(id: string):Promise<Immobile | null> {
     const immobile = await this._model.immobile.findUnique({
       where: { id: id },
       include: {
         address: true,
         type: true,
-        photos: { select: { photo: { select: { url: true } } } },
+        photos: { select:  { url: true }  },
       },
     });
     return immobile;
   }
 
   
-  async update(id: string, data: Prisma.ImmobileUpdateInput): Promise<Immobile> {
+  async update(id: string, data: UpdateImmobileDTO): Promise<Immobile> {
+    const {address, photos, ...otherInfos} = data;
+
+    const immobileData: Prisma.ImmobileUpdateInput = {
+      address:{update: {data: address}},
+      photos: {updateMany: {...photos}},
+      ...otherInfos,
+    };
   
     const updatedImmobile = await this._model.immobile.update({
       where: { id: id },
-      data: data, 
+      data: immobileData,
     });
 
     return updatedImmobile;
@@ -48,7 +65,6 @@ class ImmobileRepository {
   }
 
   async delete(id: string): Promise<Immobile> {
-    await this._model.immobilePhoto.deleteMany({where: { immobileId: id }});
     const immobile = await this._model.immobile.delete({where: { id: id }});
 
     return immobile;

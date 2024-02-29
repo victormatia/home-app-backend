@@ -1,12 +1,11 @@
-import { Immobile, Prisma } from '@prisma/client';
+import { Immobile } from '@prisma/client';
 import ImmobileRepository from '../repository/ImmobileRepository';
 
 import { FavoriteImmobile } from '@prisma/client';
 import { BadRequestError } from '../error/BadRequestError';
 import { InternalServerError } from '../error/InternalServerError';
 import { NotFoundError } from '../error/NotFoundError';
-import { CreateImmobile } from '../interfaces/IImmobile';
-import IService from '../interfaces/IService';
+import { CreateImmobileDTO, UpdateImmobileDTO } from '../interfaces/ImmobileDto';
 import { FavoriteRepository } from '../repository/FavoriteRepository';
 import { GenericErrors, ImmobileErrors } from '../util/messages';
 
@@ -17,19 +16,11 @@ class ImmobileService {
   constructor(private _repository: ImmobileRepository, private _favoriteRepository: FavoriteRepository) {
   }
 
-  public async create(immobileInfo: CreateImmobile): Promise<Immobile> {
+  public async create(immobileInfo: CreateImmobileDTO): Promise<Immobile> {
     try {
-      const { ownerId, address, typeId, ...otherInfos } = immobileInfo;
-
-      const immobileData: Prisma.ImmobileCreateInput = {
-        ...otherInfos,
-        address: { create: { ...address } },
-        owner: { connect: { id: ownerId } },
-        type: { connect: { id: typeId } },
-      };
 
 
-      const registeredImmobile = await this._repository.create(immobileData);
+      const registeredImmobile = await this._repository.create(immobileInfo);
       return registeredImmobile;
     } catch (e) {
       console.error(e);
@@ -44,19 +35,13 @@ class ImmobileService {
   }
 
   public async getImmobileById(id: string): Promise<Immobile> {
-    try {
+    const immobile = await this._repository.findById(id);
 
-      const immobile = await this._repository.findById(id);
-
-      if (immobile === null) {
-        throw new NotFoundError(ImmobileErrors.IMMOBILE_NOT_FOUND);
-      }
-      return immobile;
-    
-    } catch (e) {
-      console.error(e);
-      throw new InternalServerError(GenericErrors.SERVER_ERROR);
+    if (immobile === null) {
+      throw new NotFoundError(ImmobileErrors.IMMOBILE_NOT_FOUND);
     }
+    return immobile;
+
   }
 
   public async deleteImmobileById(id: string): Promise<Immobile> {
@@ -72,38 +57,18 @@ class ImmobileService {
   }
  
 
-  public async updateImmobileById(id: string, immobileInfo: CreateImmobile): Promise<IService<Immobile>> {
-    try {
-      const { ownerId, address, typeId, ...otherInfos } = immobileInfo;
+  public async updateImmobileById(id: string, immobileInfo: UpdateImmobileDTO ): Promise<Immobile> {
+   
 
-      if (ownerId === undefined || address === undefined || typeId === undefined) {
-        throw new BadRequestError(ImmobileErrors.UPDATE_INFO_INCOMPLETE);
-      }
-
-      const existingImmobile = await this._repository.findById(id);
-      if (!existingImmobile) {
-        throw new NotFoundError(ImmobileErrors.ADDRESS_NOT_FOUND);
-      }
-
-      if (!existingImmobile.address || existingImmobile.address.id !== address.id) {
-        throw new BadRequestError(ImmobileErrors.IMMOBILE_AND_ADRRESS_ARE_NOT_CONNECTED);
-      }
-
-      const data: Prisma.ImmobileUpdateInput = {
-        ...otherInfos,
-        owner: { connect: { id: ownerId } },
-        type: { connect: { id: typeId } },
-        address: { update: { ...address } },
-      };
-
-      const updatedImmobile = await this._repository.update(id, data);
-
-      return { result: updatedImmobile };
-
-    } catch (e) {
-      console.error(e);
-      return { message: 'Something went wrong' };
+    const existingImmobile = await this._repository.findById(id);
+    if (!existingImmobile) {
+      throw new NotFoundError(ImmobileErrors.ADDRESS_NOT_FOUND);
     }
+    
+
+    const updatedImmobile = await this._repository.update(id, immobileInfo);
+
+    return updatedImmobile;
   }
 
   public checkOwnership(immobileId: string, ownerId: string) {

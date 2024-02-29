@@ -1,4 +1,4 @@
-import { CreateImmobile } from '../../interfaces/IImmobile';
+import { CreateImmobile } from '../../interfaces/ImmobileDto';
 // import { Immobile } from '@prisma/client';
 import { Prisma } from '@prisma/client';
 

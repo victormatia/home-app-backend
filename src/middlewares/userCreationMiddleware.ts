@@ -13,6 +13,7 @@ export function userCreationMiddleware(req: Request, res: Response, next: NextFu
     req.body = { ...req.body, id: userId };
 
   } catch (err) {
+    console.log(err);
     throw new BadRequestError(UserErrors.TOKEN_MALFORMED);
   }
   return next();

@@ -5,13 +5,14 @@ import { AuthorizationErrors, GenericErrors } from '../util/messages';
 
 export function errorMiddleware(err: Error, _req: Request, res: Response, _next: NextFunction) {
   if(err instanceof ApiError) {
-    console.log(err);
+    console.error(err);
     return res.status(err.status).json({message: err.message});
   }
   if(err instanceof UnauthorizedError) {
+    console.error(err);
     return res.status(err.statusCode).json({message: AuthorizationErrors.UNAUTHORIZED_ERROR});
   }
-  console.log(err);
+  console.error(err);
   return res.status(500).json({ message: GenericErrors.SERVER_ERROR});
 }
 

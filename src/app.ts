@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 
 import { errorMiddleware } from './middlewares/ErrorMiddleware';
-import immobileRoutes from './routes/immobileRoute';
+import immobileRoutes from './routes/immobileRoutes';
 import userRoutes from './routes/userRoutes';
 
 class App {

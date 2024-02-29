@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateImmobile } from '../interfaces/IImmobile';
+import { CreateImmobileDTO, UpdateImmobileDTO } from '../interfaces/ImmobileDto';
 import ImmobileService from '../services/ImmobileService';
 
 class ImmobileController {
@@ -10,8 +10,8 @@ class ImmobileController {
   }
 
   public create = async (req: Request, res: Response, next: NextFunction) => {
-    const data: CreateImmobile = req.body;
     try {
+      const data: CreateImmobileDTO = req.body;
       const result = await this._service.create(data);
       return res.status(201).json(result);
     } catch (err) {
@@ -29,8 +29,8 @@ class ImmobileController {
   };
 
   public getImmobileById = async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
     try {
+      const { id } = req.params;
       const result = await this._service.getImmobileById(id);
       return res.status(200).json(result);
     } catch (err) {
@@ -39,8 +39,8 @@ class ImmobileController {
   };
 
   public deleteImmobileById = async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
     try {
+      const { id } = req.params;
       const result = await this._service.deleteImmobileById(id);
       return res.status(200).json(result);
     } catch (err) {
@@ -49,9 +49,10 @@ class ImmobileController {
   };
 
   public updateImmobileById = async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
     try {
-      const immobileInfo: CreateImmobile = req.body;
+      const { id } = req.params;
+      console.log(req.params);
+      const immobileInfo: UpdateImmobileDTO = req.body;
       const result = await this._service.updateImmobileById(id, immobileInfo);
       return res.status(200).json(result);
     } catch (err) {

@@ -11,68 +11,6 @@ async function main() {
     ],
   });
 
-  const addresses = await prisma.address.createMany({
-    data: [
-      {
-        id: '000',
-        street: 'Rua 00',
-        city: 'Itapipoca',
-        state: 'Ceará',
-        postalCode: '62500-000',
-        number: '0000',
-        apto: '0000',
-        complement: 'Próximo ao bar do Mozá',
-        burgh: 'Violete',
-      },
-      {
-        id: '001',
-        street: 'Rua 01',
-        city: 'Itapipoca',
-        state: 'Ceará',
-        postalCode: '62500-000',
-        number: '0001',
-        apto: '0001',
-        complement: 'Próximo ao bar do Mozá',
-        burgh: 'Violete',
-      },
-      {
-        id: '003',
-        street: 'Rua 03',
-        city: 'Itapipoca',
-        state: 'Ceará',
-        postalCode: '62500-000',
-        number: '0003',
-        burgh: 'Cruzeiro',
-      },
-      {
-        id: '004',
-        street: 'Rua 04',
-        city: 'Fortaleza',
-        state: 'Ceará',
-        postalCode: '06803-440',
-        number: '0004',
-        burgh: 'Aldeota',
-      },
-      {
-        id: '005',
-        street: 'General Sampaio',
-        city: 'Fortaleza',
-        state: 'Ceará',
-        postalCode: '06803-440',
-        number: '0005',
-        burgh: 'Centro',
-      },
-      {
-        id: '006',
-        street: 'Av. 13 de maio',
-        city: 'Fortaleza',
-        state: 'Ceará',
-        postalCode: '06803-440',
-        number: '0006',
-        burgh: 'Fátima',
-      },
-    ],
-  });
 
   const immobileTypes = await prisma.immobileType.createMany({
     data: [
@@ -104,7 +42,6 @@ async function main() {
       {
         id: '000',
         ownerId: 'google-oauth2|10015361573371827215',
-        addressId: '000',
         price: '500',
         typeId: '002',
         sqrFootage: '70',
@@ -116,7 +53,6 @@ async function main() {
       {
         id: '001',
         ownerId: 'google-oauth2|10015361573371827215',
-        addressId: '001',
         price: '500',
         typeId: '002',
         sqrFootage: '70',
@@ -128,7 +64,6 @@ async function main() {
       {
         id: '002',
         ownerId: 'google-oauth2|10015361573371827215',
-        addressId: '004',
         price: '500',
         typeId: '002',
         sqrFootage: '70',
@@ -140,7 +75,6 @@ async function main() {
       {
         id: '003',
         ownerId: 'google-oauth2|10015361573371827215',
-        addressId: '005',
         price: '1000',
         typeId: '001',
         sqrFootage: '100',
@@ -152,7 +86,6 @@ async function main() {
       {
         id: '004',
         ownerId: 'google-oauth2|10015361573371827215',
-        addressId: '006',
         price: '850',
         typeId: '005',
         sqrFootage: '80',
@@ -160,6 +93,66 @@ async function main() {
         bathroomsQty: 2,
         petFriendly: true,
         description: 'Sobrado com 80m² com sala e cozinha integradas, mezanino e 3 quartos.',
+      },
+    ],
+  });
+
+  const addresses = await prisma.address.createMany({
+    data: [
+      {
+        id: '000',
+        street: 'Rua 00',
+        city: 'Itapipoca',
+        state: 'Ceará',
+        postalCode: '62500-000',
+        number: '0000',
+        apto: '0000',
+        complement: 'Próximo ao bar do Mozá',
+        burgh: 'Violete',
+        immobileId: '000',
+        
+      },
+      {
+        id: '001',
+        street: 'Rua 01',
+        city: 'Itapipoca',
+        state: 'Ceará',
+        postalCode: '62500-000',
+        number: '0001',
+        apto: '0001',
+        complement: 'Próximo ao bar do Mozá',
+        burgh: 'Violete',
+        immobileId: '001',
+      },
+      {
+        id: '003',
+        street: 'Rua 03',
+        city: 'Itapipoca',
+        state: 'Ceará',
+        postalCode: '62500-000',
+        number: '0003',
+        burgh: 'Cruzeiro',
+        immobileId: '002',
+      },
+      {
+        id: '004',
+        street: 'Rua 04',
+        city: 'Fortaleza',
+        state: 'Ceará',
+        postalCode: '06803-440',
+        number: '0004',
+        burgh: 'Aldeota',
+        immobileId: '003',
+      },
+      {
+        id: '005',
+        street: 'General Sampaio',
+        city: 'Fortaleza',
+        state: 'Ceará',
+        postalCode: '06803-440',
+        number: '0005',
+        burgh: 'Centro',
+        immobileId: '004',
       },
     ],
   });
